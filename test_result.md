@@ -125,6 +125,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "ROUTE ANALYSIS TESTING COMPLETED: Gemini API integration working excellently for new route analysis feature. Tested 2 travel queries (Goa beaches, Karnataka travel) with 100% success rate. Generated high-quality responses (2595-3153 characters) with proper cultural insights and travel recommendations. All API calls successful with proper error handling."
+      - working: true
+        agent: "testing"
+        comment: "UPDATED GEMINI API KEY TESTING COMPLETED: Fixed missing dependencies (litellm, geographiclib) and Gemini API integration now working perfectly with updated API key. Tested 2 travel queries with 100% success rate: Simple travel query (2229 chars) and Karnataka travel query (3062 chars). All API calls successful with proper error handling and high-quality cultural insights."
         
   - task: "Enhanced Itinerary Generation API"
     implemented: true
