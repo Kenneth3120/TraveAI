@@ -237,10 +237,12 @@ function App() {
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                <h1 className={`text-3xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent`}>
                   TraveAI
                 </h1>
-                <p className="text-slate-600 text-sm font-medium">Your Intelligent Travel Companion</p>
+                <p className={`text-sm font-medium transition-colors duration-300 ${
+                  darkMode ? 'text-gray-300' : 'text-slate-600'
+                }`}>Your Intelligent Travel Companion</p>
               </div>
             </motion.div>
             
