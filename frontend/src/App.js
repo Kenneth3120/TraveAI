@@ -219,6 +219,14 @@ function App() {
   const [routeAnalysis, setRouteAnalysis] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
+  // Explore state
+  const [exploreContent, setExploreContent] = useState(null);
+  const [isLoadingExplore, setIsLoadingExplore] = useState(false);
+
+  // Dashboard stats state
+  const [dashboardStats, setDashboardStats] = useState(null);
+  const [isLoadingStats, setIsLoadingStats] = useState(false);
+
   // Chat state
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
