@@ -284,6 +284,20 @@ function App() {
 
             {/* Auth Section */}
             <div className="flex items-center space-x-4">
+              {/* Dark Mode Toggle */}
+              <motion.button
+                onClick={toggleDarkMode}
+                className={`p-3 rounded-full transition-all duration-300 ${
+                  darkMode 
+                    ? 'bg-gray-800 hover:bg-gray-700 text-yellow-400' 
+                    : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+                }`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </motion.button>
+
               <SignedOut>
                 <SignInButton mode="modal">
                   <button className="text-slate-600 hover:text-indigo-600 px-4 py-2 rounded-lg font-medium transition-colors">
