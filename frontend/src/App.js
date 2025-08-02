@@ -388,6 +388,42 @@ function App() {
     }
   };
 
+  const loadExploreContent = async () => {
+    setIsLoadingExplore(true);
+    try {
+      const response = await axios.get(`${API}/explore`);
+      setExploreContent(response.data);
+    } catch (error) {
+      console.error('Error loading explore content:', error);
+      toast.error('Failed to load explore content');
+    } finally {
+      setIsLoadingExplore(false);
+    }
+  };
+
+  const loadDashboardStats = async () => {
+    setIsLoadingStats(true);
+    try {
+      const response = await axios.get(`${API}/dashboard-stats?session_id=${sessionId}`);
+      setDashboardStats(response.data);
+    } catch (error) {
+      console.error('Error loading dashboard stats:', error);
+      toast.error('Failed to load dashboard statistics');
+    } finally {
+      setIsLoadingStats(false);
+    }
+  };
+
+  // Load data based on active tab
+  useEffect(() => {
+    if (activeTab === 'explore' && !exploreContent) {
+      loadExploreContent();
+    }
+    if (activeTab === 'dashboard' && !dashboardStats) {
+      loadDashboardStats();
+    }
+  }, [activeTab]);
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
