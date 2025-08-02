@@ -480,13 +480,17 @@ class TraveAITester:
         """Test database storage and retrieval"""
         print("\n🗄️ Testing Database Operations...")
         
+    async def test_database_operations(self):
+        """Test database storage and retrieval"""
+        print("\n🗄️ Testing Database Operations...")
+        
         try:
             # Test retrieving itineraries for our session
             async with self.session.get(f"{BACKEND_URL}/itineraries/{self.test_session_id}") as response:
                 if response.status == 200:
                     data = await response.json()
                     if isinstance(data, list):
-                        print(f"✅ Database retrieval: SUCCESS")
+                        print(f"✅ Itinerary retrieval: SUCCESS")
                         print(f"   Found {len(data)} itineraries for session")
                         
                         # Validate itinerary structure if any exist
@@ -496,25 +500,89 @@ class TraveAITester:
                             missing_fields = [field for field in required_fields if field not in sample]
                             
                             if not missing_fields:
-                                print(f"✅ Database structure: Valid itinerary structure")
-                                self.results["database_operations"]["status"] = "PASS"
+                                print(f"✅ Itinerary structure: Valid")
                                 self.results["database_operations"]["details"].append(f"✅ Retrieved {len(data)} itineraries with valid structure")
                             else:
-                                print(f"❌ Database structure: Missing fields {missing_fields}")
-                                self.results["database_operations"]["status"] = "FAIL"
+                                print(f"❌ Itinerary structure: Missing fields {missing_fields}")
                                 self.results["database_operations"]["details"].append(f"❌ Invalid itinerary structure: missing {missing_fields}")
                         else:
-                            print(f"⚠️ Database: No itineraries found (may be expected if generation failed)")
-                            self.results["database_operations"]["status"] = "PASS"
-                            self.results["database_operations"]["details"].append("✅ Database accessible, no data found (acceptable)")
+                            print(f"⚠️ No itineraries found (may be expected if generation failed)")
+                            self.results["database_operations"]["details"].append("✅ Itinerary endpoint accessible, no data found")
                     else:
-                        print(f"❌ Database: Invalid response format")
-                        self.results["database_operations"]["status"] = "FAIL"
-                        self.results["database_operations"]["details"].append("❌ Invalid response format from database")
+                        print(f"❌ Itinerary retrieval: Invalid response format")
+                        self.results["database_operations"]["details"].append("❌ Invalid response format from itinerary endpoint")
                 else:
-                    print(f"❌ Database retrieval: HTTP {response.status}")
-                    self.results["database_operations"]["status"] = "FAIL"
-                    self.results["database_operations"]["details"].append(f"❌ HTTP {response.status} on database retrieval")
+                    print(f"❌ Itinerary retrieval: HTTP {response.status}")
+                    self.results["database_operations"]["details"].append(f"❌ HTTP {response.status} on itinerary retrieval")
+            
+            # Test retrieving chat history for our session
+            async with self.session.get(f"{BACKEND_URL}/chat-history/{self.test_session_id}") as response:
+                if response.status == 200:
+                    data = await response.json()
+                    if isinstance(data, list):
+                        print(f"✅ Chat history retrieval: SUCCESS")
+                        print(f"   Found {len(data)} chat messages for session")
+                        
+                        # Validate chat history structure if any exist
+                        if len(data) > 0:
+                            sample = data[0]
+                            required_fields = ["user_message", "ai_response", "timestamp"]
+                            missing_fields = [field for field in required_fields if field not in sample]
+                            
+                            if not missing_fields:
+                                print(f"✅ Chat history structure: Valid")
+                                self.results["database_operations"]["details"].append(f"✅ Retrieved {len(data)} chat messages with valid structure")
+                            else:
+                                print(f"❌ Chat history structure: Missing fields {missing_fields}")
+                                self.results["database_operations"]["details"].append(f"❌ Invalid chat history structure: missing {missing_fields}")
+                        else:
+                            print(f"⚠️ No chat history found (may be expected)")
+                            self.results["database_operations"]["details"].append("✅ Chat history endpoint accessible, no data found")
+                    else:
+                        print(f"❌ Chat history retrieval: Invalid response format")
+                        self.results["database_operations"]["details"].append("❌ Invalid response format from chat history endpoint")
+                else:
+                    print(f"❌ Chat history retrieval: HTTP {response.status}")
+                    self.results["database_operations"]["details"].append(f"❌ HTTP {response.status} on chat history retrieval")
+            
+            # Test retrieving route analyses for our session
+            async with self.session.get(f"{BACKEND_URL}/route-analyses/{self.test_session_id}") as response:
+                if response.status == 200:
+                    data = await response.json()
+                    if isinstance(data, list):
+                        print(f"✅ Route analysis retrieval: SUCCESS")
+                        print(f"   Found {len(data)} route analyses for session")
+                        
+                        # Validate route analysis structure if any exist
+                        if len(data) > 0:
+                            sample = data[0]
+                            required_fields = ["id", "from_location", "to_location", "distance_km", "transport_options"]
+                            missing_fields = [field for field in required_fields if field not in sample]
+                            
+                            if not missing_fields:
+                                print(f"✅ Route analysis structure: Valid")
+                                self.results["database_operations"]["details"].append(f"✅ Retrieved {len(data)} route analyses with valid structure")
+                            else:
+                                print(f"❌ Route analysis structure: Missing fields {missing_fields}")
+                                self.results["database_operations"]["details"].append(f"❌ Invalid route analysis structure: missing {missing_fields}")
+                        else:
+                            print(f"⚠️ No route analyses found (may be expected)")
+                            self.results["database_operations"]["details"].append("✅ Route analysis endpoint accessible, no data found")
+                    else:
+                        print(f"❌ Route analysis retrieval: Invalid response format")
+                        self.results["database_operations"]["details"].append("❌ Invalid response format from route analysis endpoint")
+                else:
+                    print(f"❌ Route analysis retrieval: HTTP {response.status}")
+                    self.results["database_operations"]["details"].append(f"❌ HTTP {response.status} on route analysis retrieval")
+            
+            # Determine overall database operations status
+            failed_details = [detail for detail in self.results["database_operations"]["details"] if detail.startswith("❌")]
+            if len(failed_details) == 0:
+                self.results["database_operations"]["status"] = "PASS"
+                print(f"✅ Database Operations: ALL TESTS PASSED")
+            else:
+                self.results["database_operations"]["status"] = "FAIL"
+                print(f"❌ Database Operations: SOME TESTS FAILED")
                     
         except Exception as e:
             print(f"❌ Database operations: Exception - {str(e)}")
