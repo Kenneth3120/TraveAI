@@ -451,12 +451,12 @@ function App() {
             </motion.div>
             
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex space-x-6">
-              {['planner', 'route-analysis', 'chat', 'dashboard'].map((tab) => (
+            <nav className="hidden md:flex space-x-4">
+              {['planner', 'chat', 'explore', 'dashboard'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                  className={`px-5 py-2.5 rounded-full font-medium transition-all duration-300 ${
                     activeTab === tab
                       ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg transform scale-105'
                       : `transition-colors duration-300 ${
@@ -471,15 +471,15 @@ function App() {
                       <Target className="w-4 h-4" />
                       <span>{t('smartPlanner')}</span>
                     </span>
-                  ) : tab === 'route-analysis' ? (
-                    <span className="flex items-center space-x-2">
-                      <Route className="w-4 h-4" />
-                      <span>{t('routeAnalysis')}</span>
-                    </span>
                   ) : tab === 'chat' ? (
                     <span className="flex items-center space-x-2">
                       <MessageSquare className="w-4 h-4" />
                       <span>{t('aiAssistant')}</span>
+                    </span>
+                  ) : tab === 'explore' ? (
+                    <span className="flex items-center space-x-2">
+                      <Globe className="w-4 h-4" />
+                      <span>{t('explore')}</span>
                     </span>
                   ) : (
                     <span className="flex items-center space-x-2">
