@@ -24,7 +24,9 @@ import {
   Target,
   Globe,
   Zap,
-  Shield
+  Shield,
+  Moon,
+  Sun
 } from 'lucide-react';
 import { 
   SignedIn, 
