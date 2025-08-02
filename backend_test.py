@@ -665,6 +665,9 @@ class TraveAITester:
         await self.test_gemini_api_integration()
         await self.test_itinerary_generation()
         await self.test_chat_api()
+        await self.test_route_analysis()
+        await self.test_destinations_api()
+        await self.test_health_check()
         await self.test_database_operations()
         await self.test_error_handling()
         
