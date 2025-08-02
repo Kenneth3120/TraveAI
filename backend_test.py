@@ -281,7 +281,202 @@ class TraveAITester:
             self.results["chat_api"]["status"] = "FAIL"
             print(f"❌ Chat API: FAILED ({success_count}/{len(test_cases)})")
     
-    async def test_database_operations(self):
+    async def test_route_analysis(self):
+        """Test the new route analysis API with various Indian city pairs"""
+        print("\n🗺️ Testing Route Analysis API...")
+        
+        test_cases = [
+            {
+                "name": "Delhi to Mumbai route",
+                "payload": {
+                    "from_location": "Delhi",
+                    "to_location": "Mumbai",
+                    "travel_date": "2024-12-25",
+                    "travel_mode": "all",
+                    "session_id": self.test_session_id
+                }
+            },
+            {
+                "name": "Bangalore to Goa route",
+                "payload": {
+                    "from_location": "Bangalore",
+                    "to_location": "Goa",
+                    "travel_mode": "all",
+                    "session_id": self.test_session_id
+                }
+            },
+            {
+                "name": "Chennai to Coorg route",
+                "payload": {
+                    "from_location": "Chennai",
+                    "to_location": "Coorg",
+                    "travel_mode": "train",
+                    "session_id": self.test_session_id
+                }
+            },
+            {
+                "name": "Pune to Hampi route",
+                "payload": {
+                    "from_location": "Pune",
+                    "to_location": "Hampi",
+                    "travel_mode": "bus",
+                    "session_id": self.test_session_id
+                }
+            },
+            {
+                "name": "Hyderabad to Mysore route",
+                "payload": {
+                    "from_location": "Hyderabad",
+                    "to_location": "Mysore",
+                    "travel_mode": "flight",
+                    "session_id": self.test_session_id
+                }
+            }
+        ]
+        
+        success_count = 0
+        for test_case in test_cases:
+            try:
+                async with self.session.post(f"{BACKEND_URL}/analyze-route", json=test_case["payload"]) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        
+                        # Validate response structure
+                        required_fields = ["id", "session_id", "from_location", "to_location", "distance_km", 
+                                         "estimated_travel_time", "transport_options"]
+                        missing_fields = [field for field in required_fields if field not in data]
+                        
+                        # Validate transport options structure
+                        transport_options = data.get("transport_options", [])
+                        valid_transport = True
+                        if transport_options:
+                            for option in transport_options:
+                                required_option_fields = ["mode", "duration", "cost_range", "comfort_level", "recommendations"]
+                                if not all(field in option for field in required_option_fields):
+                                    valid_transport = False
+                                    break
+                        
+                        if not missing_fields and valid_transport and data.get("distance_km", 0) > 0:
+                            print(f"✅ {test_case['name']}: SUCCESS")
+                            print(f"   Distance: {data.get('distance_km')} km")
+                            print(f"   Transport options: {len(transport_options)}")
+                            print(f"   Session ID: {data.get('session_id')}")
+                            success_count += 1
+                            self.results["route_analysis"]["details"].append(
+                                f"✅ {test_case['name']}: {data.get('distance_km')}km, {len(transport_options)} options"
+                            )
+                        else:
+                            print(f"❌ {test_case['name']}: Missing fields {missing_fields} or invalid transport options")
+                            self.results["route_analysis"]["details"].append(
+                                f"❌ {test_case['name']}: Invalid response structure"
+                            )
+                    else:
+                        print(f"❌ {test_case['name']}: HTTP {response.status}")
+                        error_text = await response.text()
+                        self.results["route_analysis"]["details"].append(
+                            f"❌ {test_case['name']}: HTTP {response.status} - {error_text[:100]}"
+                        )
+                        
+            except Exception as e:
+                print(f"❌ {test_case['name']}: Exception - {str(e)}")
+                self.results["route_analysis"]["details"].append(
+                    f"❌ {test_case['name']}: Exception - {str(e)}"
+                )
+        
+        if success_count == len(test_cases):
+            self.results["route_analysis"]["status"] = "PASS"
+            print(f"✅ Route Analysis: ALL TESTS PASSED ({success_count}/{len(test_cases)})")
+        else:
+            self.results["route_analysis"]["status"] = "FAIL"
+            print(f"❌ Route Analysis: FAILED ({success_count}/{len(test_cases)})")
+    
+    async def test_destinations_api(self):
+        """Test destinations API"""
+        print("\n🏖️ Testing Destinations API...")
+        
+        try:
+            async with self.session.get(f"{BACKEND_URL}/destinations") as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_fields = ["destinations", "total_count", "featured_states"]
+                    missing_fields = [field for field in required_fields if field not in data]
+                    
+                    destinations = data.get("destinations", [])
+                    if not missing_fields and len(destinations) > 0:
+                        # Validate destination structure
+                        sample_dest = destinations[0]
+                        dest_required_fields = ["name", "type", "highlights", "best_time", "avg_budget"]
+                        dest_missing_fields = [field for field in dest_required_fields if field not in sample_dest]
+                        
+                        if not dest_missing_fields:
+                            print(f"✅ Destinations API: SUCCESS")
+                            print(f"   Found {len(destinations)} destinations")
+                            print(f"   Featured states: {data.get('featured_states')}")
+                            self.results["destinations_api"]["status"] = "PASS"
+                            self.results["destinations_api"]["details"].append(
+                                f"✅ Retrieved {len(destinations)} destinations with valid structure"
+                            )
+                        else:
+                            print(f"❌ Destinations API: Invalid destination structure - missing {dest_missing_fields}")
+                            self.results["destinations_api"]["status"] = "FAIL"
+                            self.results["destinations_api"]["details"].append(
+                                f"❌ Invalid destination structure: missing {dest_missing_fields}"
+                            )
+                    else:
+                        print(f"❌ Destinations API: Missing fields {missing_fields} or no destinations")
+                        self.results["destinations_api"]["status"] = "FAIL"
+                        self.results["destinations_api"]["details"].append(
+                            f"❌ Invalid response structure or no destinations"
+                        )
+                else:
+                    print(f"❌ Destinations API: HTTP {response.status}")
+                    self.results["destinations_api"]["status"] = "FAIL"
+                    self.results["destinations_api"]["details"].append(f"❌ HTTP {response.status}")
+                    
+        except Exception as e:
+            print(f"❌ Destinations API: Exception - {str(e)}")
+            self.results["destinations_api"]["status"] = "FAIL"
+            self.results["destinations_api"]["details"].append(f"❌ Exception: {str(e)}")
+    
+    async def test_health_check(self):
+        """Test health check endpoint"""
+        print("\n🏥 Testing Health Check API...")
+        
+        try:
+            async with self.session.get(f"{BACKEND_URL}/health") as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_fields = ["status", "service", "version"]
+                    missing_fields = [field for field in required_fields if field not in data]
+                    
+                    if not missing_fields and data.get("status") == "healthy":
+                        print(f"✅ Health Check: SUCCESS")
+                        print(f"   Service: {data.get('service')}")
+                        print(f"   Version: {data.get('version')}")
+                        print(f"   AI Model: {data.get('ai_model', 'N/A')}")
+                        self.results["health_check"]["status"] = "PASS"
+                        self.results["health_check"]["details"].append(
+                            f"✅ Service healthy: {data.get('service')} v{data.get('version')}"
+                        )
+                    else:
+                        print(f"❌ Health Check: Missing fields {missing_fields} or unhealthy status")
+                        self.results["health_check"]["status"] = "FAIL"
+                        self.results["health_check"]["details"].append(
+                            f"❌ Invalid health response or unhealthy status"
+                        )
+                else:
+                    print(f"❌ Health Check: HTTP {response.status}")
+                    self.results["health_check"]["status"] = "FAIL"
+                    self.results["health_check"]["details"].append(f"❌ HTTP {response.status}")
+                    
+        except Exception as e:
+            print(f"❌ Health Check: Exception - {str(e)}")
+            self.results["health_check"]["status"] = "FAIL"
+            self.results["health_check"]["details"].append(f"❌ Exception: {str(e)}")
         """Test database storage and retrieval"""
         print("\n🗄️ Testing Database Operations...")
         
