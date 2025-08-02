@@ -67,8 +67,22 @@ const LANGUAGES = [
   { code: 'ta', name: 'Tamil', nativeName: 'தமிழ்' },
   { code: 'te', name: 'Telugu', nativeName: 'తెలుగు' },
   { code: 'bn', name: 'Bengali', nativeName: 'বাংলা' },
-  // Add more languages as needed
+  { code: 'kn', name: 'Kannada', nativeName: 'ಕನ್ನಡ' },
 ];
+
+// Travel Logo Component
+const TravelLogo = ({ className = "w-8 h-8" }) => (
+  <div className="relative">
+    <img 
+      src="https://images.unsplash.com/photo-1655642272518-05aaf7b8726e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHx0cmF2ZWwlMjBpY29ufGVufDB8fHxibHVlfDE3NTQxNzA2Mzd8MA&ixlib=rb-4.1.0&q=85"
+      alt="TraveAI"
+      className={`${className} rounded-full object-cover`}
+    />
+    <div className="absolute -bottom-1 -right-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full p-1">
+      <Sparkles className="w-3 h-3 text-white" />
+    </div>
+  </div>
+);
 
 // Speech Recognition Hook
 const useSpeechRecognition = () => {
