@@ -222,13 +222,12 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Gemini API Integration"
-    - "Itinerary Generation API"
-    - "Chat API" 
     - "Trip Planner Interface"
     - "AI Chat Interface"
+    - "Travel-themed UI Design"
+    - "Animations and UX"
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
 
 agent_communication:
