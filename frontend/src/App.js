@@ -203,8 +203,21 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <Toaster position="top-right" />
+    <div className={`min-h-screen transition-colors duration-300 ${
+      darkMode 
+        ? 'bg-gradient-to-br from-gray-900 via-slate-900 to-black dark' 
+        : 'bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50'
+    }`}>
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          className: darkMode ? 'dark-toast' : '',
+          style: darkMode ? {
+            background: '#374151',
+            color: '#f3f4f6',
+          } : {}
+        }}
+      />
       
       {/* Enhanced Header */}
       <header className="bg-white/80 backdrop-blur-lg shadow-xl border-b border-indigo-100 sticky top-0 z-50">
