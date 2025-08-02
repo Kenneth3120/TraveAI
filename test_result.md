@@ -201,7 +201,7 @@ frontend:
         
   - task: "Clerk Authentication Integration"
     implemented: true
-    working: false
+    working: true
     file: "/app/frontend/src/main.jsx, /app/frontend/src/App.js"
     stuck_count: 1
     priority: "high" 
@@ -213,6 +213,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "CRITICAL ISSUE IDENTIFIED: Clerk authentication failing with 400 errors. Console shows 'ClerkJS: Something went wrong initializing Clerk in development mode. We were unable to attribute this request to an instance running on Clerk. Make sure that your Clerk Publishable Key is correct.' The publishable key appears to be invalid or expired. Authentication buttons not visible due to Clerk initialization failure. Fixed ClerkProvider setup but key validation failing."
+      - working: true
+        agent: "testing"
+        comment: "MAJOR SUCCESS: New Clerk publishable key (pk_test_cmVzdGVkLXNoYXJrLTk3LmNsZXJrLmFjY291bnRzLmRldiQ) is working! ✅ App loads without critical 400 errors ✅ Sign In and Get Started buttons visible and functional ✅ Authentication modals open properly with email input fields ✅ SignedIn/SignedOut components working correctly ✅ All core app functionality (Smart Planner, Chat, Dashboard) working perfectly ✅ Clerk initialization successful (only development warnings remain, which are normal). Authentication system is now fully functional - users can access sign-in/sign-up flows and the app properly handles authentication states."
         
   - task: "Enhanced Interactive Features"  
     implemented: true
