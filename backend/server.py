@@ -405,6 +405,250 @@ async def get_popular_destinations():
         "travel_tip": "🌟 Each destination offers unique experiences - from beach relaxation to cultural immersion!"
     }
 
+@api_router.post("/analyze-route", response_model=RouteAnalysisResponse)
+async def analyze_route(request: RouteAnalysisRequest):
+    try:
+        # Initialize geocoder
+        geolocator = Nominatim(user_agent="traveai_app")
+        
+        # Get coordinates for locations
+        from_location = geolocator.geocode(f"{request.from_location}, India")
+        to_location = geolocator.geocode(f"{request.to_location}, India")
+        
+        if not from_location or not to_location:
+            raise HTTPException(status_code=400, detail="Unable to find one or both locations. Please check location names.")
+        
+        # Calculate distance
+        from_coords = (from_location.latitude, from_location.longitude)
+        to_coords = (to_location.latitude, to_location.longitude)
+        distance = geodesic(from_coords, to_coords).kilometers
+        
+        # Enhanced system message for route analysis
+        system_message = """You are TraveAI's intelligent route analyzer and transportation expert for India. 
+        You specialize in providing comprehensive travel route analysis including:
+        
+        🚂 TRANSPORTATION MODES: Trains, buses, flights, and car travel options
+        🕒 TIMING & DURATION: Accurate travel times, best times to travel, seasonal considerations
+        💰 COST ANALYSIS: Budget-friendly to premium options with price ranges
+        🌤️ WEATHER & TRAFFIC: Real-time considerations for optimal travel experience
+        🎯 LOCAL INSIGHTS: Insider tips, booking recommendations, and travel hacks
+        
+        Provide detailed, practical recommendations that help travelers choose the best route based on:
+        ✨ Budget preferences and travel style
+        ✨ Comfort level and convenience factors
+        ✨ Seasonal weather and traffic patterns
+        ✨ Local transportation reliability and safety
+        ✨ Hidden gems and stops along the route
+        
+        Format your response with clear transportation options, each including mode, duration, cost range, comfort level, and specific recommendations."""
+        
+        # Initialize Gemini chat for route analysis
+        chat = LlmChat(
+            api_key=GEMINI_API_KEY,
+            session_id=request.session_id,
+            system_message=system_message
+        ).with_model("gemini", "gemini-2.0-flash").with_max_tokens(3072)
+        
+        # Create detailed route analysis prompt
+        travel_date_str = f" on {request.travel_date}" if request.travel_date else ""
+        mode_filter = f" focusing on {request.travel_mode} options" if request.travel_mode != "all" else ""
+        
+        user_message = UserMessage(
+            text=f"""🗺️ ROUTE ANALYSIS REQUEST: {request.from_location} to {request.to_location}
+            
+TRIP DETAILS:
+📍 From: {request.from_location}
+📍 To: {request.to_location}  
+📏 Distance: {distance:.1f} km
+📅 Travel Date: {request.travel_date or "Flexible"}
+🚗 Preferred Mode: {request.travel_mode}{mode_filter}
+
+Please provide a comprehensive route analysis including:
+
+🚂 TRAIN OPTIONS:
+- Express/Superfast trains with timings
+- Sleeper vs AC class recommendations
+- Booking platforms and advance booking tips
+- Station facilities and connectivity
+
+🚌 BUS OPTIONS:  
+- Government vs private operators
+- Ordinary, Semi-sleeper, Volvo options
+- Overnight vs daytime travel recommendations
+- Bus station locations and facilities
+
+✈️ FLIGHT OPTIONS:
+- Direct vs connecting flights
+- Budget vs full-service airlines
+- Airport transfer information
+- Best booking times for deals
+
+🚗 CAR/ROAD TRAVEL:
+- Route options and highway conditions
+- Fuel costs and toll charges
+- Rest stops and food recommendations
+- Scenic routes and detours worth taking
+
+🌤️ WEATHER & TIMING:
+- Best time of day to travel
+- Seasonal considerations{travel_date_str}
+- Weather impact on different modes
+- Traffic patterns and peak hours
+
+💡 LOCAL INSIGHTS:
+- Money-saving tips and discount offers
+- Safety considerations for each mode
+- Local transportation at destination
+- Cultural events or festivals to consider
+
+Format each option with: Mode | Duration | Cost Range | Comfort Level | Key Recommendations"""
+        )
+        
+        # Get AI response
+        ai_response = await chat.send_message(user_message)
+        
+        # Parse the AI response to extract structured data
+        # For now, we'll create a structured response based on common patterns
+        transport_options = []
+        
+        # Create transport options based on distance and typical routes
+        if distance < 100:
+            # Short distance - bus and car recommended
+            transport_options.extend([
+                TransportOption(
+                    mode="bus",
+                    duration=f"{int(distance/40)}-{int(distance/30)} hours",
+                    cost_range="₹100-400",
+                    comfort_level="Good",
+                    recommendations=["Government buses reliable", "Book seats in advance", "Carry water and snacks"],
+                    weather_considerations="Check road conditions during monsoon"
+                ),
+                TransportOption(
+                    mode="car",
+                    duration=f"{int(distance/50)}-{int(distance/40)} hours",
+                    cost_range=f"₹{int(distance*8)}-{int(distance*12)} (fuel + tolls)",
+                    comfort_level="Excellent",
+                    recommendations=["Use GPS navigation", "Plan rest stops", "Check traffic updates"],
+                    weather_considerations="Avoid night travel in hilly areas"
+                )
+            ])
+        
+        elif distance < 500:
+            # Medium distance - train, bus, and flight options
+            transport_options.extend([
+                TransportOption(
+                    mode="train",
+                    duration=f"{int(distance/60)}-{int(distance/40)} hours",
+                    cost_range="₹200-1500",
+                    comfort_level="Very Good",
+                    recommendations=["Book AC class for comfort", "Check IRCTC for schedules", "Arrive 30 mins early"],
+                    weather_considerations="Reliable in all weather conditions"
+                ),
+                TransportOption(
+                    mode="bus",
+                    duration=f"{int(distance/45)}-{int(distance/35)} hours",
+                    cost_range="₹300-800",
+                    comfort_level="Good",
+                    recommendations=["Choose Volvo for long routes", "Book online for better seats", "Carry medicines"],
+                    weather_considerations="May face delays during heavy rains"
+                ),
+                TransportOption(
+                    mode="flight",
+                    duration="1.5-3 hours (flight time only)",
+                    cost_range="₹3000-8000",
+                    comfort_level="Excellent",
+                    recommendations=["Book 2-3 weeks in advance", "Check baggage allowance", "Arrive 2 hours early"],
+                    weather_considerations="May face delays during monsoon/fog"
+                )
+            ])
+        
+        else:
+            # Long distance - prioritize flight and train
+            transport_options.extend([
+                TransportOption(
+                    mode="flight",
+                    duration="2-4 hours (flight time only)",
+                    cost_range="₹4000-12000",
+                    comfort_level="Excellent",
+                    recommendations=["Compare airlines for best deals", "Consider connecting flights", "Book meals in advance"],
+                    weather_considerations="Most reliable option regardless of weather"
+                ),
+                TransportOption(
+                    mode="train",
+                    duration=f"{int(distance/50)}-{int(distance/35)} hours",
+                    cost_range="₹500-3000",
+                    comfort_level="Very Good",
+                    recommendations=["Book AC 2-tier or 1-tier for comfort", "Carry food and entertainment", "Book early for popular routes"],
+                    weather_considerations="Reliable year-round with minor delays"
+                )
+            ])
+        
+        # Generate estimated travel time based on fastest option
+        min_duration = min([int(opt.duration.split('-')[0].split()[0]) for opt in transport_options if opt.duration.split('-')[0].split()[0].isdigit()])
+        estimated_time = f"{min_duration}-{min_duration+2} hours (fastest option)"
+        
+        # Create response object
+        route_analysis = RouteAnalysisResponse(
+            session_id=request.session_id,
+            from_location=request.from_location,
+            to_location=request.to_location,
+            distance_km=round(distance, 1),
+            estimated_travel_time=estimated_time,
+            transport_options=transport_options,
+            weather_info="Check weather conditions before travel",
+            traffic_conditions="Plan for peak hour delays in urban areas",
+            best_time_to_travel="Early morning (6-8 AM) or late evening (8-10 PM)",
+            local_tips=[
+                "Book tickets in advance for better prices",
+                "Carry valid ID proof for all modes of transport",
+                "Keep emergency contact numbers handy",
+                "Download offline maps for road travel",
+                "Check for local festivals or events that might affect travel"
+            ]
+        )
+        
+        # Save analysis to database
+        analysis_data = {
+            "session_id": request.session_id,
+            "from_location": request.from_location,
+            "to_location": request.to_location,
+            "distance_km": round(distance, 1),
+            "transport_options": [opt.dict() for opt in transport_options],
+            "ai_detailed_analysis": ai_response,
+            "created_at": datetime.utcnow(),
+            "ai_model": "gemini-2.0-flash"
+        }
+        
+        result = await db.route_analyses.insert_one(analysis_data)
+        
+        return route_analysis
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error analyzing route: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to analyze route: {str(e)}")
+
+@api_router.get("/route-analyses/{session_id}")
+async def get_route_analyses(session_id: str):
+    try:
+        analyses = await db.route_analyses.find({"session_id": session_id}).to_list(50)
+        return [
+            {
+                "id": str(analysis["_id"]),
+                "from_location": analysis.get("from_location"),
+                "to_location": analysis.get("to_location"),
+                "distance_km": analysis.get("distance_km"),
+                "transport_options": analysis.get("transport_options", []),
+                "created_at": analysis.get("created_at"),
+                "ai_detailed_analysis": analysis.get("ai_detailed_analysis")
+            }
+            for analysis in analyses
+        ]
+    except Exception as e:
+        logging.error(f"Error fetching route analyses: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch route analyses: {str(e)}")
+
 # Health check with enhanced information
 @api_router.get("/health")
 async def health_check():
