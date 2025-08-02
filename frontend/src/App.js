@@ -47,6 +47,11 @@ const API = `${BACKEND_URL}/api`;
 function App() {
   const [activeTab, setActiveTab] = useState('planner');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    // Check localStorage for dark mode preference, default to false
+    const saved = localStorage.getItem('traveai-dark-mode');
+    return saved ? JSON.parse(saved) : false;
+  });
   const [formData, setFormData] = useState({
     destination: '',
     duration: 3,
