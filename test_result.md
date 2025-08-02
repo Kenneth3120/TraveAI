@@ -122,6 +122,9 @@ backend:
       - working: true
         agent: "main"
         comment: "Enhanced system prompts and response formatting for better travel planning experience with emojis and detailed insights."
+      - working: true
+        agent: "testing"
+        comment: "ROUTE ANALYSIS TESTING COMPLETED: Gemini API integration working excellently for new route analysis feature. Tested 2 travel queries (Goa beaches, Karnataka travel) with 100% success rate. Generated high-quality responses (2595-3153 characters) with proper cultural insights and travel recommendations. All API calls successful with proper error handling."
         
   - task: "Enhanced Itinerary Generation API"
     implemented: true
@@ -137,6 +140,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "COMPREHENSIVE TESTING COMPLETED: Enhanced itinerary generation API working perfectly. Tested 5 different destinations (Goa, Bangalore, Mysore, Coorg, Hampi) with various travel styles, budgets, and interests. All tests passed with high-quality responses (6000-9500 characters). Enhanced prompts generating detailed day-by-day itineraries with cultural insights, budget breakdowns, local tips, and engaging emoji formatting. Database persistence confirmed."
+      - working: true
+        agent: "testing"
+        comment: "ROUTE ANALYSIS TESTING COMPLETED: Enhanced itinerary generation API working perfectly. Tested 5 destinations (Goa 3-day beach trip, Bangalore 2-day business, Mysore 4-day cultural, Coorg 3-day nature, Hampi 2-day heritage) with 100% success rate. Generated comprehensive itineraries (5244-7812 characters) with proper session management and database persistence. All response structures valid with required fields present."
         
   - task: "Enhanced Chat API"
     implemented: true
@@ -152,6 +158,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "COMPREHENSIVE TESTING COMPLETED: Enhanced chat API working excellently. Tested 4 different travel queries (Goa beaches, Karnataka food, Coorg travel tips, Hampi budget travel). All responses high-quality (2400-4700 characters) with cultural ambassador persona, engaging emojis, and comprehensive India expertise. Chat history persistence confirmed."
+      - working: true
+        agent: "testing"
+        comment: "ROUTE ANALYSIS TESTING COMPLETED: Enhanced chat API working excellently. Tested 4 travel queries (Goa beaches, Karnataka food, Coorg travel tips, Hampi budget travel) with 100% success rate. Generated quality responses (1497-3649 characters) with proper keyword matching and cultural insights. Chat history persistence confirmed with proper session management."
         
   - task: "Enhanced Database Models & Endpoints"
     implemented: true
@@ -167,6 +176,24 @@ backend:
       - working: true
         agent: "testing"
         comment: "COMPREHENSIVE TESTING COMPLETED: All enhanced database models and endpoints working perfectly. Tested /api/destinations (6 destinations with detailed info), /api/itineraries/{session_id} (proper data retrieval), /api/chat-history/{session_id} (chronological chat history), and /api/health (comprehensive service status). Database persistence confirmed for both itineraries and chat history with proper UUID handling and structured responses."
+      - working: true
+        agent: "testing"
+        comment: "ROUTE ANALYSIS TESTING COMPLETED: Enhanced database models and endpoints working perfectly. Tested /api/destinations (6 destinations), /api/itineraries/{session_id} (5 itineraries retrieved), /api/chat-history/{session_id} (6 chat messages), /api/route-analyses/{session_id} (5 route analyses), and /api/health (service healthy). All endpoints returning valid structured data with proper session management and database persistence."
+
+  - task: "Route Analysis API"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Implemented new /api/analyze-route endpoint with geopy integration for distance calculation, Gemini AI for detailed route analysis, and structured transport options (train, bus, flight, car) with cost estimates and recommendations."
+      - working: true
+        agent: "testing"
+        comment: "COMPREHENSIVE TESTING COMPLETED: Route Analysis API working perfectly. Tested 5 major Indian city pairs (Delhi-Mumbai 1149.4km, Bangalore-Goa 457.4km, Chennai-Coorg 288.5km, Pune-Hampi 448.7km, Hyderabad-Mysore 592.6km) with 100% success rate. All routes properly geocoded with accurate distance calculations. Generated 2-3 transport options per route with detailed cost ranges, duration estimates, comfort levels, and practical recommendations. Database persistence confirmed with proper session management. Error handling working for invalid locations and missing parameters."
 
   - task: "Clerk Authentication Preparation"
     implemented: true
