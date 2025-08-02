@@ -432,20 +432,18 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <motion.div 
-              className="flex items-center space-x-4"
+              className="flex items-center space-x-3"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-3 rounded-2xl shadow-lg">
-                <Sparkles className="w-8 h-8 text-white" />
-              </div>
+              <TravelLogo className="w-10 h-10" />
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
                   {t('appTitle')}
                 </h1>
-                <p className={`text-sm font-medium transition-colors duration-300 ${
-                  darkMode ? 'text-gray-300' : 'text-slate-600'
+                <p className={`text-xs font-medium transition-colors duration-300 ${
+                  darkMode ? 'text-gray-400' : 'text-slate-500'
                 }`}>{t('appSubtitle')}</p>
               </div>
             </motion.div>
