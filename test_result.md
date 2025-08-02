@@ -282,7 +282,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Enhanced Interactive Features"
+    - "Route Analysis API"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
