@@ -595,6 +595,18 @@ class TraveAITester:
         
         test_cases = [
             {
+                "name": "Invalid route analysis - missing from_location",
+                "endpoint": "/analyze-route",
+                "payload": {"to_location": "Mumbai", "travel_mode": "all"},
+                "expected_status": [400, 422]  # Bad request or validation error
+            },
+            {
+                "name": "Invalid route analysis - invalid location names",
+                "endpoint": "/analyze-route",
+                "payload": {"from_location": "InvalidCity123", "to_location": "AnotherInvalidCity456", "travel_mode": "all"},
+                "expected_status": [400, 500]  # May fail at geocoding level
+            },
+            {
                 "name": "Invalid itinerary request - missing destination",
                 "endpoint": "/generate-itinerary",
                 "payload": {"duration": 3, "budget": 10000},
