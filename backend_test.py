@@ -23,7 +23,10 @@ class TraveAITester:
             "gemini_api_integration": {"status": "PENDING", "details": []},
             "itinerary_generation": {"status": "PENDING", "details": []},
             "chat_api": {"status": "PENDING", "details": []},
+            "route_analysis": {"status": "PENDING", "details": []},
             "database_operations": {"status": "PENDING", "details": []},
+            "destinations_api": {"status": "PENDING", "details": []},
+            "health_check": {"status": "PENDING", "details": []},
             "error_handling": {"status": "PENDING", "details": []}
         }
     
