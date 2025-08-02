@@ -1608,6 +1608,9 @@ function App() {
           )}
         </AnimatePresence>
       </main>
+      
+      {/* ElevenLabs ConvAI Widget */}
+      <elevenlabs-convai agent-id="agent_1201k1ffmgy5edq8bpaeaxz96r9k"></elevenlabs-convai>
     </div>
   );
 }
