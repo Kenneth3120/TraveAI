@@ -608,7 +608,7 @@ function App() {
                 }`}
               >
                 <div className="flex flex-col space-y-2 pt-4">
-                  {['planner', 'route-analysis', 'chat', 'dashboard'].map((tab) => (
+                  {['planner', 'chat', 'explore', 'dashboard'].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => {
@@ -624,8 +624,8 @@ function App() {
                       }`}
                     >
                       {tab === 'planner' ? t('smartPlanner') : 
-                       tab === 'route-analysis' ? t('routeAnalysis') :
-                       tab === 'chat' ? t('aiAssistant') : t('dashboard')}
+                       tab === 'chat' ? t('aiAssistant') :
+                       tab === 'explore' ? t('explore') : t('dashboard')}
                     </button>
                   ))}
                 </div>
