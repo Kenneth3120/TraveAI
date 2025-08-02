@@ -86,6 +86,36 @@ class TravelStats(BaseModel):
     ai_recommendations: int = 0
     favorite_destinations: List[str] = []
 
+# Route Analysis Models
+class RouteAnalysisRequest(BaseModel):
+    from_location: str
+    to_location: str
+    travel_date: Optional[str] = None
+    travel_mode: str = "all"  # all, train, bus, flight
+    session_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+
+class TransportOption(BaseModel):
+    mode: str  # train, bus, flight, car
+    duration: str
+    cost_range: str
+    comfort_level: str
+    recommendations: List[str]
+    weather_considerations: Optional[str] = None
+
+class RouteAnalysisResponse(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    session_id: str
+    from_location: str
+    to_location: str
+    distance_km: float
+    estimated_travel_time: str
+    transport_options: List[TransportOption]
+    weather_info: Optional[str] = None
+    traffic_conditions: Optional[str] = None
+    best_time_to_travel: Optional[str] = None
+    local_tips: List[str] = []
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
