@@ -220,7 +220,11 @@ function App() {
       />
       
       {/* Enhanced Header */}
-      <header className="bg-white/80 backdrop-blur-lg shadow-xl border-b border-indigo-100 sticky top-0 z-50">
+      <header className={`backdrop-blur-lg shadow-xl sticky top-0 z-50 transition-colors duration-300 ${
+        darkMode 
+          ? 'bg-gray-900/80 border-b border-gray-700' 
+          : 'bg-white/80 border-b border-indigo-100'
+      }`}>
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <motion.div 
