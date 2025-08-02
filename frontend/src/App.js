@@ -255,7 +255,11 @@ function App() {
                   className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                     activeTab === tab
                       ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg transform scale-105'
-                      : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50'
+                      : `transition-colors duration-300 ${
+                          darkMode 
+                            ? 'text-gray-300 hover:text-indigo-400 hover:bg-gray-800' 
+                            : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50'
+                        }`
                   }`}
                 >
                   {tab === 'planner' ? (
