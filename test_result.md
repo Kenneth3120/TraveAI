@@ -252,10 +252,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Modern UI Design & Clerk Integration"
     - "Clerk Authentication Integration"
-    - "Enhanced Interactive Features"
-  stuck_tasks: []
+  stuck_tasks:
+    - "Clerk Authentication Integration"
   test_all: false
   test_priority: "high_first"
 
