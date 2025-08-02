@@ -91,7 +91,13 @@ const resources = {
       trekking: "Trekking",
       waterSports: "Water Sports",
       localMarkets: "Local Markets",
-      nightlife: "Nightlife"
+      nightlife: "Nightlife",
+      
+      // Explore Section
+      explore: "Explore",
+      featuredOffers: "Featured Offers",
+      upcomingEvents: "Upcoming Events",
+      localVendors: "Local Vendors"
     }
   },
   hi: {
