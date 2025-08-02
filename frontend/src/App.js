@@ -69,6 +69,20 @@ function App() {
   const { user } = useUser();
   const { getToken } = useAuth();
 
+  // Dark mode effect
+  useEffect(() => {
+    localStorage.setItem('traveai-dark-mode', JSON.stringify(darkMode));
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(prev => !prev);
+  };
+
   const interests = [
     'Adventure Sports', 'Beach Activities', 'Cultural Heritage', 'Food & Cuisine',
     'Photography', 'Wildlife', 'Trekking', 'Water Sports', 'Local Markets', 'Nightlife'
