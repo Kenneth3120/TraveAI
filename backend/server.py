@@ -94,6 +94,67 @@ class RouteAnalysisRequest(BaseModel):
     travel_mode: str = "all"  # all, train, bus, flight
     session_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
 
+# Vendor Collaboration Models
+class VendorProfile(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: str
+    phone: str
+    business_type: str  # hotel, restaurant, tour_guide, transport, activity, shopping
+    location: str
+    description: str
+    verified: bool = False
+    rating: float = 0.0
+    total_reviews: int = 0
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class VendorOffer(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    vendor_id: str
+    vendor_name: str
+    title: str
+    description: str
+    category: str  # accommodation, food, tours, transport, activities, shopping
+    location: str
+    price: Optional[float] = None
+    currency: str = "INR"
+    discount_percentage: Optional[int] = None
+    valid_from: datetime
+    valid_until: datetime
+    terms_conditions: Optional[str] = None
+    contact_info: str
+    images: List[str] = []  # Base64 encoded images
+    tags: List[str] = []
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class TourismEvent(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    description: str
+    event_type: str  # festival, cultural, adventure, food, nature
+    location: str
+    start_date: datetime
+    end_date: datetime
+    entry_fee: Optional[float] = None
+    organizer: str
+    contact_info: str
+    images: List[str] = []  # Base64 encoded images
+    tags: List[str] = []
+    is_featured: bool = False
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class VendorReview(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    vendor_id: str
+    user_name: str
+    rating: int  # 1-5 stars
+    review_text: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
 class TransportOption(BaseModel):
     mode: str  # train, bus, flight, car
     duration: str
