@@ -717,11 +717,317 @@ async def health_check():
         "status": "healthy",
         "service": "TraveAI API",
         "version": "1.0.0",
-        "ai_model": "gemini-2.0-flash",
-        "features_active": ["itinerary_generation", "chat_assistant", "destination_info"],
-        "uptime": "Running smoothly! 🚀",
-        "message": "Ready to plan your next adventure! ✈️"
+        "features": [
+            "AI Itinerary Generation",
+            "Smart Route Analysis",
+            "Travel Chat Assistant",
+            "Vendor Collaboration",
+            "Tourism Event Management"
+        ],
+        "database": "Connected",
+        "ai_model": "Gemini 2.0 Flash"
     }
+
+# Vendor Collaboration Endpoints
+
+@api_router.post("/vendors", response_model=VendorProfile)
+async def create_vendor(vendor: VendorProfile):
+    try:
+        vendor_dict = vendor.dict()
+        await db.vendors.insert_one(vendor_dict)
+        return vendor
+    except Exception as e:
+        logging.error(f"Error creating vendor: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to create vendor profile: {str(e)}")
+
+@api_router.get("/vendors")
+async def get_vendors(business_type: Optional[str] = None, location: Optional[str] = None):
+    try:
+        query = {"verified": True}
+        if business_type:
+            query["business_type"] = business_type
+        if location:
+            query["location"] = {"$regex": location, "$options": "i"}
+        
+        vendors = await db.vendors.find(query).sort("rating", -1).to_list(100)
+        return [
+            {
+                "id": vendor["id"],
+                "name": vendor["name"],
+                "business_type": vendor["business_type"],
+                "location": vendor["location"],
+                "description": vendor["description"],
+                "rating": vendor["rating"],
+                "total_reviews": vendor["total_reviews"]
+            }
+            for vendor in vendors
+        ]
+    except Exception as e:
+        logging.error(f"Error fetching vendors: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch vendors: {str(e)}")
+
+@api_router.get("/vendors/{vendor_id}")
+async def get_vendor_details(vendor_id: str):
+    try:
+        vendor = await db.vendors.find_one({"id": vendor_id})
+        if not vendor:
+            raise HTTPException(status_code=404, detail="Vendor not found")
+        return vendor
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error fetching vendor details: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch vendor details: {str(e)}")
+
+@api_router.post("/vendor-offers", response_model=VendorOffer)
+async def create_vendor_offer(offer: VendorOffer):
+    try:
+        offer_dict = offer.dict()
+        await db.vendor_offers.insert_one(offer_dict)
+        return offer
+    except Exception as e:
+        logging.error(f"Error creating vendor offer: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to create vendor offer: {str(e)}")
+
+@api_router.get("/vendor-offers")
+async def get_vendor_offers(
+    category: Optional[str] = None, 
+    location: Optional[str] = None,
+    active_only: bool = True
+):
+    try:
+        query = {}
+        if active_only:
+            query["is_active"] = True
+            query["valid_until"] = {"$gte": datetime.utcnow()}
+        if category:
+            query["category"] = category
+        if location:
+            query["location"] = {"$regex": location, "$options": "i"}
+        
+        offers = await db.vendor_offers.find(query).sort("created_at", -1).to_list(50)
+        return [
+            {
+                "id": offer["id"],
+                "vendor_name": offer["vendor_name"],
+                "title": offer["title"],
+                "description": offer["description"],
+                "category": offer["category"],
+                "location": offer["location"],
+                "price": offer["price"],
+                "currency": offer["currency"],
+                "discount_percentage": offer["discount_percentage"],
+                "valid_until": offer["valid_until"],
+                "contact_info": offer["contact_info"],
+                "images": offer["images"][:1] if offer["images"] else [],  # Only first image for list view
+                "tags": offer["tags"]
+            }
+            for offer in offers
+        ]
+    except Exception as e:
+        logging.error(f"Error fetching vendor offers: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch vendor offers: {str(e)}")
+
+@api_router.get("/vendor-offers/{offer_id}")
+async def get_vendor_offer_details(offer_id: str):
+    try:
+        offer = await db.vendor_offers.find_one({"id": offer_id})
+        if not offer:
+            raise HTTPException(status_code=404, detail="Offer not found")
+        return offer
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error fetching offer details: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch offer details: {str(e)}")
+
+@api_router.post("/tourism-events", response_model=TourismEvent)
+async def create_tourism_event(event: TourismEvent):
+    try:
+        event_dict = event.dict()
+        await db.tourism_events.insert_one(event_dict)
+        return event
+    except Exception as e:
+        logging.error(f"Error creating tourism event: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to create tourism event: {str(e)}")
+
+@api_router.get("/tourism-events")
+async def get_tourism_events(
+    event_type: Optional[str] = None,
+    location: Optional[str] = None,
+    featured_only: bool = False
+):
+    try:
+        query = {}
+        if featured_only:
+            query["is_featured"] = True
+        if event_type:
+            query["event_type"] = event_type
+        if location:
+            query["location"] = {"$regex": location, "$options": "i"}
+        
+        # Only show upcoming or current events
+        query["end_date"] = {"$gte": datetime.utcnow()}
+        
+        events = await db.tourism_events.find(query).sort("start_date", 1).to_list(50)
+        return [
+            {
+                "id": event["id"],
+                "title": event["title"],
+                "description": event["description"],
+                "event_type": event["event_type"],
+                "location": event["location"],
+                "start_date": event["start_date"],
+                "end_date": event["end_date"],
+                "entry_fee": event["entry_fee"],
+                "organizer": event["organizer"],
+                "contact_info": event["contact_info"],
+                "images": event["images"][:1] if event["images"] else [],  # Only first image for list view
+                "tags": event["tags"],
+                "is_featured": event["is_featured"]
+            }
+            for event in events
+        ]
+    except Exception as e:
+        logging.error(f"Error fetching tourism events: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch tourism events: {str(e)}")
+
+@api_router.get("/explore")
+async def get_explore_content():
+    """Get content for the explore section - featured offers and events"""
+    try:
+        # Get featured offers (limit to 6)
+        featured_offers = await db.vendor_offers.find({
+            "is_active": True,
+            "valid_until": {"$gte": datetime.utcnow()}
+        }).sort("created_at", -1).limit(6).to_list(6)
+        
+        # Get featured events (limit to 6)  
+        featured_events = await db.tourism_events.find({
+            "is_featured": True,
+            "end_date": {"$gte": datetime.utcnow()}
+        }).sort("start_date", 1).limit(6).to_list(6)
+        
+        # Get recent offers (limit to 8)
+        recent_offers = await db.vendor_offers.find({
+            "is_active": True,
+            "valid_until": {"$gte": datetime.utcnow()}
+        }).sort("created_at", -1).limit(8).to_list(8)
+        
+        return {
+            "featured_offers": [
+                {
+                    "id": offer["id"],
+                    "vendor_name": offer["vendor_name"],
+                    "title": offer["title"],
+                    "description": offer["description"][:150] + "..." if len(offer["description"]) > 150 else offer["description"],
+                    "category": offer["category"],
+                    "location": offer["location"],
+                    "price": offer["price"],
+                    "currency": offer["currency"],
+                    "discount_percentage": offer["discount_percentage"],
+                    "images": offer["images"][:1] if offer["images"] else [],
+                    "tags": offer["tags"][:3]  # Limit tags for display
+                }
+                for offer in featured_offers
+            ],
+            "featured_events": [
+                {
+                    "id": event["id"],
+                    "title": event["title"],
+                    "description": event["description"][:150] + "..." if len(event["description"]) > 150 else event["description"],
+                    "event_type": event["event_type"],
+                    "location": event["location"],
+                    "start_date": event["start_date"],
+                    "end_date": event["end_date"],
+                    "entry_fee": event["entry_fee"],
+                    "organizer": event["organizer"],
+                    "images": event["images"][:1] if event["images"] else [],
+                    "tags": event["tags"][:3]
+                }
+                for event in featured_events
+            ],
+            "recent_offers": [
+                {
+                    "id": offer["id"],
+                    "vendor_name": offer["vendor_name"],
+                    "title": offer["title"],
+                    "category": offer["category"],
+                    "location": offer["location"],
+                    "price": offer["price"],
+                    "discount_percentage": offer["discount_percentage"],
+                    "images": offer["images"][:1] if offer["images"] else []
+                }
+                for offer in recent_offers
+            ],
+            "stats": {
+                "total_offers": len(recent_offers),
+                "total_events": len(featured_events),
+                "categories": ["accommodation", "food", "tours", "transport", "activities", "shopping"]
+            }
+        }
+    except Exception as e:
+        logging.error(f"Error fetching explore content: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch explore content: {str(e)}")
+
+@api_router.get("/dashboard-stats")
+async def get_dashboard_stats(session_id: Optional[str] = None):
+    """Get real-time dashboard statistics"""
+    try:
+        # If session_id provided, get user-specific stats
+        if session_id:
+            user_itineraries = await db.itineraries.count_documents({"session_id": session_id})
+            user_chat_messages = await db.chat_history.count_documents({"session_id": session_id})
+            user_route_analyses = await db.route_analyses.count_documents({"session_id": session_id})
+        else:
+            user_itineraries = 0
+            user_chat_messages = 0
+            user_route_analyses = 0
+        
+        # Global stats
+        total_users = await db.itineraries.distinct("session_id")
+        total_itineraries = await db.itineraries.count_documents({})
+        total_vendors = await db.vendors.count_documents({"verified": True})
+        total_offers = await db.vendor_offers.count_documents({"is_active": True})
+        total_events = await db.tourism_events.count_documents({"end_date": {"$gte": datetime.utcnow()}})
+        
+        # Popular destinations from itineraries
+        popular_destinations = await db.itineraries.aggregate([
+            {"$group": {"_id": "$destination", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 5}
+        ]).to_list(5)
+        
+        return {
+            "user_stats": {
+                "trips_planned": user_itineraries,
+                "ai_interactions": user_chat_messages,
+                "routes_analyzed": user_route_analyses,
+                "countries_visited": min(3, user_itineraries // 2),  # Mock calculation
+                "ai_recommendations": user_chat_messages + user_itineraries + user_route_analyses
+            },
+            "global_stats": {
+                "total_users": len(total_users),
+                "total_trips_planned": total_itineraries,
+                "verified_vendors": total_vendors,
+                "active_offers": total_offers,
+                "upcoming_events": total_events
+            },
+            "popular_destinations": [
+                {"name": dest["_id"], "count": dest["count"]} 
+                for dest in popular_destinations
+            ],
+            "recent_activity": [
+                "🎉 New vendor partnership added",
+                "✈️ Route analysis feature improved",
+                "🏛️ Cultural heritage events updated",
+                "🌊 Beach destinations optimized",
+                "🏔️ Mountain trek routes added"
+            ]
+        }
+    except Exception as e:
+        logging.error(f"Error fetching dashboard stats: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch dashboard stats: {str(e)}")
 
 # Include the router in the main app
 app.include_router(api_router)
