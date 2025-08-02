@@ -42,7 +42,14 @@ import {
   Plane,
   Train,
   Bus,
-  Car
+  Car,
+  Gift,
+  Calendar as CalendarIcon,
+  Store,
+  Percent,
+  Eye,
+  Heart,
+  Share2
 } from 'lucide-react';
 import { 
   SignedIn, 
@@ -689,291 +696,207 @@ function App() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 50 }}
               transition={{ duration: 0.5 }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-12"
+              className="space-y-8"
             >
-              {/* Enhanced Trip Planner Form */}
-              <div className={`backdrop-blur-lg rounded-3xl shadow-2xl p-8 border transition-all duration-500 ${
-                darkMode 
-                  ? 'bg-gray-800/70 border-gray-700' 
-                  : 'bg-white/70 border-indigo-100'
-              }`}>
-                <h3 className={`text-2xl font-bold mb-6 flex items-center ${
-                  darkMode ? 'text-white' : 'text-slate-800'
-                }`}>
-                  <Target className="w-6 h-6 text-indigo-600 mr-3" />
+              <div className="text-center mb-8">
+                <h2 className={`text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-slate-800'}`}>
                   {t('smartPlanner')}
-                </h3>
-                
-                {/* Form content remains the same but with dark mode styling */}
-                <div className="mb-6">
-                  <label className={`block font-semibold mb-3 ${
-                    darkMode ? 'text-gray-300' : 'text-slate-700'
-                  }`}>{t('dreamDestination')}</label>
-                  <select
-                    name="destination"
-                    value={formData.destination}
-                    onChange={handleInputChange}
-                    className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
-                      darkMode 
-                        ? 'bg-gray-700/80 border-gray-600 text-white focus:border-indigo-400' 
-                        : 'bg-white/80 border-indigo-200 focus:border-indigo-500'
-                    }`}
-                  >
-                    <option value="">{t('chooseAdventure')}</option>
-                    {destinations.map(dest => (
-                      <option key={dest} value={dest}>{dest}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="mb-6">
-                  <label className={`block font-semibold mb-3 ${
-                    darkMode ? 'text-gray-300' : 'text-slate-700'
-                  }`}>{t('journeyDuration')}</label>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      name="duration"
-                      value={formData.duration}
-                      onChange={handleInputChange}
-                      min="1"
-                      max="30"
-                      className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
-                        darkMode 
-                          ? 'bg-gray-700/80 border-gray-600 text-white focus:border-indigo-400' 
-                          : 'bg-white/80 border-indigo-200 focus:border-indigo-500'
-                      }`}
-                    />
-                    <Calendar className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-indigo-400" />
-                  </div>
-                </div>
-
-                <div className="mb-6">
-                  <label className={`block font-semibold mb-3 ${
-                    darkMode ? 'text-gray-300' : 'text-slate-700'
-                  }`}>{t('budget')}</label>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      name="budget"
-                      value={formData.budget}
-                      onChange={handleInputChange}
-                      placeholder={t('yourBudget')}
-                      className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
-                        darkMode 
-                          ? 'bg-gray-700/80 border-gray-600 text-white focus:border-indigo-400' 
-                          : 'bg-white/80 border-indigo-200 focus:border-indigo-500'
-                      }`}
-                    />
-                    <IndianRupee className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-indigo-400" />
-                  </div>
-                </div>
-
-                <div className="mb-6">
-                  <label className={`block font-semibold mb-3 ${
-                    darkMode ? 'text-gray-300' : 'text-slate-700'
-                  }`}>{t('travelStyle')}</label>
-                  <select
-                    name="travel_style"
-                    value={formData.travel_style}
-                    onChange={handleInputChange}
-                    className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
-                      darkMode 
-                        ? 'bg-gray-700/80 border-gray-600 text-white focus:border-indigo-400' 
-                        : 'bg-white/80 border-indigo-200 focus:border-indigo-500'
-                    }`}
-                  >
-                    <option value="budget">{t('budgetExplorer')}</option>
-                    <option value="balanced">{t('balancedTraveler')}</option>
-                    <option value="luxury">{t('luxuryExperience')}</option>
-                  </select>
-                </div>
-
-                <div className="mb-8">
-                  <label className={`block font-semibold mb-3 ${
-                    darkMode ? 'text-gray-300' : 'text-slate-700'
-                  }`}>{t('whatExcites')}</label>
-                  <div className="grid grid-cols-2 gap-3">
-                    {interests.map(interest => (
-                      <button
-                        key={interest}
-                        onClick={() => toggleInterest(interest)}
-                        className={`p-3 rounded-xl text-sm font-medium transition-all duration-300 ${
-                          formData.interests.includes(interest)
-                            ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg transform scale-105'
-                            : darkMode
-                              ? 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-gray-600'
-                              : 'bg-indigo-50 text-slate-700 hover:bg-indigo-100 border border-indigo-200'
-                        }`}
-                      >
-                        {t(interest.toLowerCase().replace(/\s+/g, '').replace('&', ''))}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Generate Button */}
-                <motion.button
-                  onClick={generateItinerary}
-                  disabled={isGenerating}
-                  className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 disabled:opacity-50 relative overflow-hidden"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {isGenerating ? (
-                    <span className="flex items-center justify-center">
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      {t('creatingJourney')}
-                    </span>
-                  ) : (
-                    <span className="flex items-center justify-center">
-                      <Sparkles className="w-5 h-5 mr-2" />
-                      {t('generateItinerary')}
-                    </span>
-                  )}
-                </motion.button>
+                </h2>
+                <p className={`text-xl ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>
+                  Plan your perfect journey with AI-powered insights
+                </p>
               </div>
 
-              {/* Enhanced Generated Itinerary with Markdown */}
-              <div className={`backdrop-blur-lg rounded-3xl shadow-2xl p-8 border transition-all duration-500 ${
-                darkMode 
-                  ? 'bg-gray-800/70 border-gray-700' 
-                  : 'bg-white/70 border-indigo-100'
-              }`}>
-                <h3 className={`text-2xl font-bold mb-6 flex items-center ${
-                  darkMode ? 'text-white' : 'text-slate-800'
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Trip Planner Form */}
+                <div className={`backdrop-blur-lg rounded-3xl shadow-2xl p-8 border transition-all duration-500 ${
+                  darkMode 
+                    ? 'bg-gray-800/70 border-gray-700' 
+                    : 'bg-white/70 border-indigo-100'
                 }`}>
-                  <Star className="w-6 h-6 text-yellow-500 mr-3" />
-                  {t('personalizedJourney')}
-                </h3>
-                
-                {generatedItinerary ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="prose prose-lg max-w-none"
-                  >
-                    <div className={`p-6 rounded-2xl border-2 shadow-inner transition-all duration-500 ${
-                      darkMode 
-                        ? 'bg-gray-900/50 border-gray-600 prose-invert' 
-                        : 'bg-gradient-to-br from-indigo-50 via-white to-purple-50 border-indigo-200'
-                    }`}>
-                      {/* TTS Button for Itinerary */}
-                      <div className="mb-4 flex justify-end">
+                  <h3 className={`text-2xl font-bold mb-6 flex items-center ${
+                    darkMode ? 'text-white' : 'text-slate-800'
+                  }`}>
+                    <Target className="w-6 h-6 text-indigo-600 mr-3" />
+                    Itinerary Planner
+                  </h3>
+                  
+                  <div className="mb-6">
+                    <label className={`block font-semibold mb-3 ${
+                      darkMode ? 'text-gray-300' : 'text-slate-700'
+                    }`}>{t('dreamDestination')}</label>
+                    <select
+                      name="destination"
+                      value={formData.destination}
+                      onChange={handleInputChange}
+                      className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
+                        darkMode 
+                          ? 'bg-gray-700/80 border-gray-600 text-white focus:border-indigo-400' 
+                          : 'bg-white/80 border-indigo-200 focus:border-indigo-500'
+                      }`}
+                    >
+                      <option value="">{t('chooseAdventure')}</option>
+                      {destinations.map(dest => (
+                        <option key={dest} value={dest}>{dest}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <label className={`block font-semibold mb-3 ${
+                        darkMode ? 'text-gray-300' : 'text-slate-700'
+                      }`}>{t('journeyDuration')}</label>
+                      <input
+                        type="number"
+                        name="duration"
+                        value={formData.duration}
+                        onChange={handleInputChange}
+                        min="1"
+                        max="30"
+                        className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
+                          darkMode 
+                            ? 'bg-gray-700/80 border-gray-600 text-white focus:border-indigo-400' 
+                            : 'bg-white/80 border-indigo-200 focus:border-indigo-500'
+                        }`}
+                      />
+                    </div>
+                    <div>
+                      <label className={`block font-semibold mb-3 ${
+                        darkMode ? 'text-gray-300' : 'text-slate-700'
+                      }`}>{t('budget')}</label>
+                      <input
+                        type="number"
+                        name="budget"
+                        value={formData.budget}
+                        onChange={handleInputChange}
+                        placeholder="₹ Optional"
+                        className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
+                          darkMode 
+                            ? 'bg-gray-700/80 border-gray-600 text-white focus:border-indigo-400' 
+                            : 'bg-white/80 border-indigo-200 focus:border-indigo-500'
+                        }`}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mb-6">
+                    <label className={`block font-semibold mb-3 ${
+                      darkMode ? 'text-gray-300' : 'text-slate-700'
+                    }`}>{t('travelStyle')}</label>
+                    <select
+                      name="travel_style"
+                      value={formData.travel_style}
+                      onChange={handleInputChange}
+                      className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
+                        darkMode 
+                          ? 'bg-gray-700/80 border-gray-600 text-white focus:border-indigo-400' 
+                          : 'bg-white/80 border-indigo-200 focus:border-indigo-500'
+                      }`}
+                    >
+                      <option value="budget">{t('budgetExplorer')}</option>
+                      <option value="balanced">{t('balancedTraveler')}</option>
+                      <option value="luxury">{t('luxuryExperience')}</option>
+                    </select>
+                  </div>
+
+                  <div className="mb-8">
+                    <label className={`block font-semibold mb-3 ${
+                      darkMode ? 'text-gray-300' : 'text-slate-700'
+                    }`}>{t('whatExcites')}</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {interests.map(interest => (
                         <button
-                          onClick={() => isSpeaking ? stopSpeaking() : speak(generatedItinerary, i18n.language)}
-                          className={`p-2 rounded-lg transition-colors ${
-                            darkMode 
-                              ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
-                              : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+                          key={interest}
+                          onClick={() => toggleInterest(interest)}
+                          className={`p-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                            formData.interests.includes(interest)
+                              ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg transform scale-105'
+                              : darkMode
+                                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-gray-600'
+                                : 'bg-indigo-50 text-slate-700 hover:bg-indigo-100 border border-indigo-200'
                           }`}
                         >
-                          {isSpeaking ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                          {interest}
                         </button>
-                      </div>
-                      
-                      <ReactMarkdown 
-                        remarkPlugins={[remarkGfm]}
-                        className={`${darkMode ? 'text-gray-300' : 'text-slate-700'}`}
-                      >
-                        {generatedItinerary}
-                      </ReactMarkdown>
+                      ))}
                     </div>
-                  </motion.div>
-                ) : (
-                  <div className="text-center py-16">
-                    <motion.div
-                      animate={{ 
-                        y: [0, -10, 0],
-                        rotateX: [0, 10, 0]
-                      }}
-                      transition={{ 
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    >
-                      <MapPin className={`w-20 h-20 mx-auto mb-6 ${
-                        darkMode ? 'text-indigo-400' : 'text-indigo-300'
-                      }`} />
-                    </motion.div>
-                    <h4 className={`text-xl font-bold mb-2 ${
-                      darkMode ? 'text-gray-300' : 'text-slate-600'
-                    }`}>{t('readyForAdventure')}</h4>
-                    <p className={`text-lg ${
-                      darkMode ? 'text-gray-400' : 'text-slate-500'
-                    }`}>
-                      Your AI-powered itinerary will appear here
-                    </p>
                   </div>
-                )}
-              </div>
-            </motion.div>
-          )}
 
-          {activeTab === 'route-analysis' && (
-            <motion.div
-              key="route-analysis"
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 50 }}
-              transition={{ duration: 0.5 }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-12"
-            >
-              {/* Route Analysis Form */}
-              <div className={`backdrop-blur-lg rounded-3xl shadow-2xl p-8 border transition-all duration-500 ${
-                darkMode 
-                  ? 'bg-gray-800/70 border-gray-700' 
-                  : 'bg-white/70 border-indigo-100'
-              }`}>
-                <h3 className={`text-2xl font-bold mb-6 flex items-center ${
-                  darkMode ? 'text-white' : 'text-slate-800'
+                  <motion.button
+                    onClick={generateItinerary}
+                    disabled={isGenerating}
+                    className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 disabled:opacity-50"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {isGenerating ? (
+                      <span className="flex items-center justify-center">
+                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                        {t('creatingJourney')}
+                      </span>
+                    ) : (
+                      <span className="flex items-center justify-center">
+                        <Sparkles className="w-5 h-5 mr-2" />
+                        {t('generateItinerary')}
+                      </span>
+                    )}
+                  </motion.button>
+                </div>
+
+                {/* Route Analysis Form */}
+                <div className={`backdrop-blur-lg rounded-3xl shadow-2xl p-8 border transition-all duration-500 ${
+                  darkMode 
+                    ? 'bg-gray-800/70 border-gray-700' 
+                    : 'bg-white/70 border-indigo-100'
                 }`}>
-                  <Route className="w-6 h-6 text-indigo-600 mr-3" />
-                  {t('routePlannerTitle')}
-                </h3>
-                
-                <div className="mb-6">
-                  <label className={`block font-semibold mb-3 ${
-                    darkMode ? 'text-gray-300' : 'text-slate-700'
-                  }`}>{t('fromLocation')}</label>
-                  <input
-                    type="text"
-                    name="from_location"
-                    value={routeData.from_location}
-                    onChange={handleRouteInputChange}
-                    placeholder="Enter starting location"
-                    className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
-                      darkMode 
-                        ? 'bg-gray-700/80 border-gray-600 text-white focus:border-indigo-400' 
-                        : 'bg-white/80 border-indigo-200 focus:border-indigo-500'
-                    }`}
-                  />
-                </div>
+                  <h3 className={`text-2xl font-bold mb-6 flex items-center ${
+                    darkMode ? 'text-white' : 'text-slate-800'
+                  }`}>
+                    <Route className="w-6 h-6 text-green-600 mr-3" />
+                    Route Analyzer
+                  </h3>
+                  
+                  <div className="mb-6">
+                    <label className={`block font-semibold mb-3 ${
+                      darkMode ? 'text-gray-300' : 'text-slate-700'
+                    }`}>From Location</label>
+                    <input
+                      type="text"
+                      name="from_location"
+                      value={routeData.from_location}
+                      onChange={handleRouteInputChange}
+                      placeholder="Enter starting location"
+                      className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
+                        darkMode 
+                          ? 'bg-gray-700/80 border-gray-600 text-white focus:border-green-400' 
+                          : 'bg-white/80 border-green-200 focus:border-green-500'
+                      }`}
+                    />
+                  </div>
 
-                <div className="mb-6">
-                  <label className={`block font-semibold mb-3 ${
-                    darkMode ? 'text-gray-300' : 'text-slate-700'
-                  }`}>{t('toLocation')}</label>
-                  <input
-                    type="text"
-                    name="to_location"
-                    value={routeData.to_location}
-                    onChange={handleRouteInputChange}
-                    placeholder="Enter destination"
-                    className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
-                      darkMode 
-                        ? 'bg-gray-700/80 border-gray-600 text-white focus:border-indigo-400' 
-                        : 'bg-white/80 border-indigo-200 focus:border-indigo-500'
-                    }`}
-                  />
-                </div>
+                  <div className="mb-6">
+                    <label className={`block font-semibold mb-3 ${
+                      darkMode ? 'text-gray-300' : 'text-slate-700'
+                    }`}>To Location</label>
+                    <input
+                      type="text"
+                      name="to_location"
+                      value={routeData.to_location}
+                      onChange={handleRouteInputChange}
+                      placeholder="Enter destination"
+                      className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
+                        darkMode 
+                          ? 'bg-gray-700/80 border-gray-600 text-white focus:border-green-400' 
+                          : 'bg-white/80 border-green-200 focus:border-green-500'
+                      }`}
+                    />
+                  </div>
 
-                <div className="mb-6">
-                  <label className={`block font-semibold mb-3 ${
-                    darkMode ? 'text-gray-300' : 'text-slate-700'
-                  }`}>{t('travelDate')}</label>
-                  <div className="relative">
+                  <div className="mb-6">
+                    <label className={`block font-semibold mb-3 ${
+                      darkMode ? 'text-gray-300' : 'text-slate-700'
+                    }`}>Travel Date (Optional)</label>
                     <input
                       type="date"
                       name="travel_date"
@@ -981,192 +904,169 @@ function App() {
                       onChange={handleRouteInputChange}
                       className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
                         darkMode 
-                          ? 'bg-gray-700/80 border-gray-600 text-white focus:border-indigo-400' 
-                          : 'bg-white/80 border-indigo-200 focus:border-indigo-500'
+                          ? 'bg-gray-700/80 border-gray-600 text-white focus:border-green-400' 
+                          : 'bg-white/80 border-green-200 focus:border-green-500'
                       }`}
                     />
                   </div>
-                </div>
 
-                <div className="mb-8">
-                  <label className={`block font-semibold mb-3 ${
-                    darkMode ? 'text-gray-300' : 'text-slate-700'
-                  }`}>Travel Mode Preference</label>
-                  <select
-                    name="travel_mode"
-                    value={routeData.travel_mode}
-                    onChange={handleRouteInputChange}
-                    className={`w-full p-4 border-2 rounded-2xl focus:outline-none transition-colors ${
-                      darkMode 
-                        ? 'bg-gray-700/80 border-gray-600 text-white focus:border-indigo-400' 
-                        : 'bg-white/80 border-indigo-200 focus:border-indigo-500'
-                    }`}
+                  <motion.button
+                    onClick={analyzeRoute}
+                    disabled={isAnalyzing}
+                    className="w-full bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 text-white py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 disabled:opacity-50"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <option value="all">All Transport Modes</option>
-                    <option value="train">Trains Only</option>
-                    <option value="bus">Buses Only</option>
-                    <option value="flight">Flights Only</option>
-                  </select>
+                    {isAnalyzing ? (
+                      <span className="flex items-center justify-center">
+                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                        Analyzing Routes...
+                      </span>
+                    ) : (
+                      <span className="flex items-center justify-center">
+                        <Navigation className="w-5 h-5 mr-2" />
+                        Analyze Routes
+                      </span>
+                    )}
+                  </motion.button>
                 </div>
-
-                <motion.button
-                  onClick={analyzeRoute}
-                  disabled={isAnalyzing}
-                  className="w-full bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 text-white py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 disabled:opacity-50"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {isAnalyzing ? (
-                    <span className="flex items-center justify-center">
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      {t('analyzingRoutes')}
-                    </span>
-                  ) : (
-                    <span className="flex items-center justify-center">
-                      <Navigation className="w-5 h-5 mr-2" />
-                      {t('analyzeRoutes')}
-                    </span>
-                  )}
-                </motion.button>
               </div>
 
-              {/* Route Analysis Results */}
-              <div className={`backdrop-blur-lg rounded-3xl shadow-2xl p-8 border transition-all duration-500 ${
-                darkMode 
-                  ? 'bg-gray-800/70 border-gray-700' 
-                  : 'bg-white/70 border-indigo-100'
-              }`}>
-                <h3 className={`text-2xl font-bold mb-6 flex items-center ${
-                  darkMode ? 'text-white' : 'text-slate-800'
-                }`}>
-                  <Clock className="w-6 h-6 text-green-500 mr-3" />
-                  {t('bestRoutes')}
-                </h3>
-                
-                {routeAnalysis ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="space-y-6"
-                  >
-                    {/* Route Summary */}
-                    <div className={`p-4 rounded-xl border ${
+              {/* Results Section */}
+              {(generatedItinerary || routeAnalysis) && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                  {/* Generated Itinerary */}
+                  {generatedItinerary && (
+                    <div className={`backdrop-blur-lg rounded-3xl shadow-2xl p-8 border transition-all duration-500 ${
                       darkMode 
-                        ? 'bg-gray-900/50 border-gray-600' 
-                        : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200'
+                        ? 'bg-gray-800/70 border-gray-700' 
+                        : 'bg-white/70 border-indigo-100'
                     }`}>
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <span className={`font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Distance: </span>
-                          <span className="font-bold">{routeAnalysis.distance_km} km</span>
-                        </div>
-                        <div>
-                          <span className={`font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Est. Time: </span>
-                          <span className="font-bold">{routeAnalysis.estimated_travel_time}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Transport Options */}
-                    <div className="space-y-4">
-                      {routeAnalysis.transport_options.map((option, index) => (
-                        <div key={index} className={`p-4 rounded-xl border transition-all duration-300 hover:shadow-lg ${
-                          darkMode 
-                            ? 'bg-gray-900/30 border-gray-600 hover:border-gray-500' 
-                            : 'bg-white/80 border-gray-200 hover:border-indigo-300'
-                        }`}>
-                          <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center space-x-3">
-                              <div className="p-2 rounded-lg bg-indigo-100 text-indigo-600">
-                                {getTransportIcon(option.mode)}
-                              </div>
-                              <div>
-                                <h4 className={`font-bold capitalize ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-                                  {option.mode}
-                                </h4>
-                                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                                  {option.duration}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <div className={`px-3 py-1 rounded-full text-xs font-medium ${getComfortColor(option.comfort_level)}`}>
-                                {option.comfort_level}
-                              </div>
-                              <p className={`text-sm font-bold mt-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                {option.cost_range}
-                              </p>
-                            </div>
-                          </div>
-                          
-                          <div className="space-y-2">
-                            {option.recommendations.map((rec, recIndex) => (
-                              <p key={recIndex} className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                                • {rec}
-                              </p>
-                            ))}
-                          </div>
-                          
-                          {option.weather_considerations && (
-                            <div className={`mt-3 p-3 rounded-lg ${
-                              darkMode ? 'bg-yellow-900/30 text-yellow-300' : 'bg-yellow-50 text-yellow-800'
-                            }`}>
-                              <p className="text-sm font-medium">⚠️ Weather Consideration:</p>
-                              <p className="text-sm">{option.weather_considerations}</p>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Local Tips */}
-                    {routeAnalysis.local_tips && routeAnalysis.local_tips.length > 0 && (
-                      <div className={`p-4 rounded-xl border ${
-                        darkMode 
-                          ? 'bg-green-900/30 border-green-700' 
-                          : 'bg-green-50 border-green-200'
+                      <h3 className={`text-2xl font-bold mb-6 flex items-center ${
+                        darkMode ? 'text-white' : 'text-slate-800'
                       }`}>
-                        <h4 className={`font-bold mb-3 ${darkMode ? 'text-green-300' : 'text-green-800'}`}>
-                          💡 Local Tips
-                        </h4>
-                        <div className="space-y-2">
-                          {routeAnalysis.local_tips.map((tip, tipIndex) => (
-                            <p key={tipIndex} className={`text-sm ${darkMode ? 'text-green-200' : 'text-green-700'}`}>
-                              • {tip}
-                            </p>
+                        <Star className="w-6 h-6 text-yellow-500 mr-3" />
+                        Your Personalized Journey
+                      </h3>
+                      
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="prose prose-lg max-w-none"
+                      >
+                        <div className={`p-6 rounded-2xl border-2 shadow-inner transition-all duration-500 ${
+                          darkMode 
+                            ? 'bg-gray-900/50 border-gray-600 prose-invert' 
+                            : 'bg-gradient-to-br from-indigo-50 via-white to-purple-50 border-indigo-200'
+                        }`}>
+                          <div className="mb-4 flex justify-end">
+                            <button
+                              onClick={() => isSpeaking ? stopSpeaking() : speak(generatedItinerary, i18n.language)}
+                              className={`p-2 rounded-lg transition-colors ${
+                                darkMode 
+                                  ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                                  : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+                              }`}
+                            >
+                              {isSpeaking ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                            </button>
+                          </div>
+                          
+                          <ReactMarkdown 
+                            remarkPlugins={[remarkGfm]}
+                            className={`${darkMode ? 'text-gray-300' : 'text-slate-700'}`}
+                          >
+                            {generatedItinerary}
+                          </ReactMarkdown>
+                        </div>
+                      </motion.div>
+                    </div>
+                  )}
+
+                  {/* Route Analysis Results */}
+                  {routeAnalysis && (
+                    <div className={`backdrop-blur-lg rounded-3xl shadow-2xl p-8 border transition-all duration-500 ${
+                      darkMode 
+                        ? 'bg-gray-800/70 border-gray-700' 
+                        : 'bg-white/70 border-green-100'
+                    }`}>
+                      <h3 className={`text-2xl font-bold mb-6 flex items-center ${
+                        darkMode ? 'text-white' : 'text-slate-800'
+                      }`}>
+                        <Clock className="w-6 h-6 text-green-500 mr-3" />
+                        Best Travel Routes
+                      </h3>
+                      
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="space-y-6"
+                      >
+                        {/* Route Summary */}
+                        <div className={`p-4 rounded-xl border ${
+                          darkMode 
+                            ? 'bg-gray-900/50 border-gray-600' 
+                            : 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200'
+                        }`}>
+                          <div className="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <span className={`font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Distance: </span>
+                              <span className="font-bold">{routeAnalysis.distance_km} km</span>
+                            </div>
+                            <div>
+                              <span className={`font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Est. Time: </span>
+                              <span className="font-bold">{routeAnalysis.estimated_travel_time}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Transport Options */}
+                        <div className="space-y-4">
+                          {routeAnalysis.transport_options.map((option, index) => (
+                            <div key={index} className={`p-4 rounded-xl border transition-all duration-300 hover:shadow-lg ${
+                              darkMode 
+                                ? 'bg-gray-900/30 border-gray-600 hover:border-gray-500' 
+                                : 'bg-white/80 border-gray-200 hover:border-green-300'
+                            }`}>
+                              <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center space-x-3">
+                                  <div className="p-2 rounded-lg bg-green-100 text-green-600">
+                                    {getTransportIcon(option.mode)}
+                                  </div>
+                                  <div>
+                                    <h4 className={`font-bold capitalize ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                                      {option.mode}
+                                    </h4>
+                                    <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                      {option.duration}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="text-right">
+                                  <div className={`px-3 py-1 rounded-full text-xs font-medium ${getComfortColor(option.comfort_level)}`}>
+                                    {option.comfort_level}
+                                  </div>
+                                  <p className={`text-sm font-bold mt-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    {option.cost_range}
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              <div className="space-y-2">
+                                {option.recommendations.map((rec, recIndex) => (
+                                  <p key={recIndex} className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    • {rec}
+                                  </p>
+                                ))}
+                              </div>
+                            </div>
                           ))}
                         </div>
-                      </div>
-                    )}
-                  </motion.div>
-                ) : (
-                  <div className="text-center py-16">
-                    <motion.div
-                      animate={{ 
-                        y: [0, -10, 0],
-                        rotateX: [0, 10, 0]
-                      }}
-                      transition={{ 
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    >
-                      <Route className={`w-20 h-20 mx-auto mb-6 ${
-                        darkMode ? 'text-green-400' : 'text-green-300'
-                      }`} />
-                    </motion.div>
-                    <h4 className={`text-xl font-bold mb-2 ${
-                      darkMode ? 'text-gray-300' : 'text-slate-600'
-                    }`}>Plan Your Perfect Route</h4>
-                    <p className={`text-lg ${
-                      darkMode ? 'text-gray-400' : 'text-slate-500'
-                    }`}>
-                      Enter your travel details to get the best route analysis
-                    </p>
-                  </div>
-                )}
-              </div>
+                      </motion.div>
+                    </div>
+                  )}
+                </div>
+              )}
             </motion.div>
           )}
 
@@ -1184,7 +1084,7 @@ function App() {
                   ? 'bg-gray-800/70 border-gray-700' 
                   : 'bg-white/70 border-indigo-100'
               }`}>
-                {/* Enhanced Chat Header */}
+                {/* Chat Header */}
                 <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 p-6">
                   <h3 className="text-2xl font-bold text-white flex items-center">
                     <Bot className="w-7 h-7 mr-3" />
@@ -1195,7 +1095,7 @@ function App() {
                   </p>
                 </div>
 
-                {/* Enhanced Chat Messages */}
+                {/* Chat Messages */}
                 <div className={`h-96 overflow-y-auto p-6 space-y-6 transition-all duration-500 ${
                   darkMode 
                     ? 'bg-gradient-to-br from-gray-900 to-slate-900' 
@@ -1340,7 +1240,7 @@ function App() {
                   <div ref={chatEndRef} />
                 </div>
 
-                {/* Enhanced Chat Input with Speech Features */}
+                {/* Chat Input */}
                 <div className={`border-t p-6 transition-all duration-500 ${
                   darkMode 
                     ? 'bg-gray-800/50 border-gray-700' 
@@ -1362,7 +1262,6 @@ function App() {
                         disabled={isChatting}
                       />
                       
-                      {/* Speech Recognition Button */}
                       <button
                         onClick={isListening ? stopListening : startListening}
                         className={`absolute right-3 top-1/2 transform -translate-y-1/2 p-2 rounded-lg transition-colors ${
@@ -1399,6 +1298,271 @@ function App() {
             </motion.div>
           )}
 
+          {activeTab === 'explore' && (
+            <motion.div
+              key="explore"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+              className="space-y-8"
+            >
+              <div className="text-center mb-8">
+                <h2 className={`text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+                  Explore Local Offers & Events
+                </h2>
+                <p className={`text-xl ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>
+                  Discover amazing deals and events from local vendors
+                </p>
+              </div>
+
+              {isLoadingExplore ? (
+                <div className="flex justify-center items-center py-20">
+                  <Loader2 className="w-12 h-12 animate-spin text-indigo-600" />
+                </div>
+              ) : exploreContent ? (
+                <div className="space-y-12">
+                  {/* Featured Offers */}
+                  {exploreContent.featured_offers && exploreContent.featured_offers.length > 0 && (
+                    <section>
+                      <h3 className={`text-2xl font-bold mb-6 flex items-center ${
+                        darkMode ? 'text-white' : 'text-slate-800'
+                      }`}>
+                        <Gift className="w-6 h-6 text-purple-600 mr-3" />
+                        Featured Offers
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {exploreContent.featured_offers.map((offer) => (
+                          <motion.div
+                            key={offer.id}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className={`rounded-3xl shadow-xl overflow-hidden border transition-all duration-300 hover:shadow-2xl hover:scale-105 ${
+                              darkMode 
+                                ? 'bg-gray-800/70 border-gray-700' 
+                                : 'bg-white/80 border-indigo-100'
+                            }`}
+                          >
+                            {offer.images && offer.images.length > 0 && (
+                              <div className="h-48 bg-gradient-to-r from-purple-400 to-pink-400 relative">
+                                <img 
+                                  src={`data:image/jpeg;base64,${offer.images[0]}`}
+                                  alt={offer.title}
+                                  className="w-full h-full object-cover"
+                                />
+                                {offer.discount_percentage && (
+                                  <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                                    {offer.discount_percentage}% OFF
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                            <div className="p-6">
+                              <div className="flex items-start justify-between mb-3">
+                                <div>
+                                  <h4 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+                                    {offer.title}
+                                  </h4>
+                                  <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-slate-600'}`}>
+                                    by {offer.vendor_name}
+                                  </p>
+                                </div>
+                                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                  darkMode ? 'bg-purple-900/50 text-purple-300' : 'bg-purple-100 text-purple-600'
+                                }`}>
+                                  {offer.category}
+                                </span>
+                              </div>
+                              
+                              <p className={`text-sm mb-4 ${darkMode ? 'text-gray-300' : 'text-slate-700'}`}>
+                                {offer.description}
+                              </p>
+                              
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-2">
+                                  <MapPin className="w-4 h-4 text-gray-500" />
+                                  <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-slate-600'}`}>
+                                    {offer.location}
+                                  </span>
+                                </div>
+                                {offer.price && (
+                                  <div className="text-right">
+                                    <span className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+                                      ₹{offer.price}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="flex flex-wrap gap-2 mt-4">
+                                {offer.tags.map((tag, tagIndex) => (
+                                  <span
+                                    key={tagIndex}
+                                    className={`px-2 py-1 rounded-lg text-xs ${
+                                      darkMode ? 'bg-gray-700 text-gray-300' : 'bg-indigo-50 text-indigo-600'
+                                    }`}
+                                  >
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {/* Featured Events */}
+                  {exploreContent.featured_events && exploreContent.featured_events.length > 0 && (
+                    <section>
+                      <h3 className={`text-2xl font-bold mb-6 flex items-center ${
+                        darkMode ? 'text-white' : 'text-slate-800'
+                      }`}>
+                        <CalendarIcon className="w-6 h-6 text-green-600 mr-3" />
+                        Upcoming Events
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {exploreContent.featured_events.map((event) => (
+                          <motion.div
+                            key={event.id}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className={`rounded-3xl shadow-xl overflow-hidden border transition-all duration-300 hover:shadow-2xl hover:scale-105 ${
+                              darkMode 
+                                ? 'bg-gray-800/70 border-gray-700' 
+                                : 'bg-white/80 border-green-100'
+                            }`}
+                          >
+                            {event.images && event.images.length > 0 && (
+                              <div className="h-48 bg-gradient-to-r from-green-400 to-emerald-400 relative">
+                                <img 
+                                  src={`data:image/jpeg;base64,${event.images[0]}`}
+                                  alt={event.title}
+                                  className="w-full h-full object-cover"
+                                />
+                                <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                                  {event.event_type}
+                                </div>
+                              </div>
+                            )}
+                            <div className="p-6">
+                              <h4 className={`text-lg font-bold mb-2 ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+                                {event.title}
+                              </h4>
+                              
+                              <p className={`text-sm mb-4 ${darkMode ? 'text-gray-300' : 'text-slate-700'}`}>
+                                {event.description}
+                              </p>
+
+                              <div className="space-y-2 mb-4">
+                                <div className="flex items-center space-x-2">
+                                  <CalendarIcon className="w-4 h-4 text-gray-500" />
+                                  <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-slate-600'}`}>
+                                    {new Date(event.start_date).toLocaleDateString()} - {new Date(event.end_date).toLocaleDateString()}
+                                  </span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <MapPin className="w-4 h-4 text-gray-500" />
+                                  <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-slate-600'}`}>
+                                    {event.location}
+                                  </span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Users className="w-4 h-4 text-gray-500" />
+                                  <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-slate-600'}`}>
+                                    Organized by {event.organizer}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center justify-between">
+                                <div className="flex flex-wrap gap-2">
+                                  {event.tags.map((tag, tagIndex) => (
+                                    <span
+                                      key={tagIndex}
+                                      className={`px-2 py-1 rounded-lg text-xs ${
+                                        darkMode ? 'bg-gray-700 text-gray-300' : 'bg-green-50 text-green-600'
+                                      }`}
+                                    >
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
+                                {event.entry_fee !== null && (
+                                  <div className="text-right">
+                                    <span className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+                                      {event.entry_fee === 0 ? 'Free' : `₹${event.entry_fee}`}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {/* Recent Offers Quick View */}
+                  {exploreContent.recent_offers && exploreContent.recent_offers.length > 0 && (
+                    <section>
+                      <h3 className={`text-2xl font-bold mb-6 flex items-center ${
+                        darkMode ? 'text-white' : 'text-slate-800'
+                      }`}>
+                        <Store className="w-6 h-6 text-blue-600 mr-3" />
+                        Latest Deals
+                      </h3>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {exploreContent.recent_offers.map((offer) => (
+                          <motion.div
+                            key={offer.id}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className={`rounded-2xl p-4 border transition-all duration-300 hover:shadow-lg hover:scale-105 ${
+                              darkMode 
+                                ? 'bg-gray-800/50 border-gray-700' 
+                                : 'bg-white/60 border-blue-100'
+                            }`}
+                          >
+                            <div className="text-center">
+                              <h4 className={`font-bold text-sm mb-2 ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+                                {offer.title}
+                              </h4>
+                              <p className={`text-xs mb-2 ${darkMode ? 'text-gray-400' : 'text-slate-600'}`}>
+                                {offer.vendor_name}
+                              </p>
+                              {offer.discount_percentage && (
+                                <div className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold mb-2">
+                                  {offer.discount_percentage}% OFF
+                                </div>
+                              )}
+                              {offer.price && (
+                                <p className={`font-bold ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+                                  ₹{offer.price}
+                                </p>
+                              )}
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+                </div>
+              ) : (
+                <div className="text-center py-20">
+                  <Store className={`w-20 h-20 mx-auto mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-300'}`} />
+                  <h4 className={`text-xl font-bold mb-2 ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>
+                    No offers available yet
+                  </h4>
+                  <p className={`text-lg ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>
+                    Check back soon for amazing deals from local vendors!
+                  </p>
+                </div>
+              )}
+            </motion.div>
+          )}
+
           {activeTab === 'dashboard' && (
             <motion.div
               key="dashboard"
@@ -1426,138 +1590,236 @@ function App() {
                   }`}>{t('dashboardSubtitle')}</p>
                 </div>
 
-                {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                  {[
-                    { title: t('tripsPlanned'), value: "12", icon: MapPin, color: "from-blue-500 to-cyan-500", bg: darkMode ? "from-blue-900/30 to-cyan-900/30" : "from-blue-50 to-cyan-50" },
-                    { title: t('countriesVisited'), value: "3", icon: Globe, color: "from-green-500 to-emerald-500", bg: darkMode ? "from-green-900/30 to-emerald-900/30" : "from-green-50 to-emerald-50" },
-                    { title: t('aiRecommendations'), value: "48", icon: Sparkles, color: "from-purple-500 to-pink-500", bg: darkMode ? "from-purple-900/30 to-pink-900/30" : "from-purple-50 to-pink-50" }
-                  ].map((stat, index) => (
+                {isLoadingStats ? (
+                  <div className="flex justify-center items-center py-20">
+                    <Loader2 className="w-12 h-12 animate-spin text-indigo-600" />
+                  </div>
+                ) : dashboardStats ? (
+                  <>
+                    {/* Real-time Stats Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                      {[
+                        { 
+                          title: t('tripsPlanned'), 
+                          value: dashboardStats.user_stats.trips_planned, 
+                          icon: MapPin, 
+                          color: "from-blue-500 to-cyan-500", 
+                          bg: darkMode ? "from-blue-900/30 to-cyan-900/30" : "from-blue-50 to-cyan-50" 
+                        },
+                        { 
+                          title: t('countriesVisited'), 
+                          value: dashboardStats.user_stats.countries_visited, 
+                          icon: Globe, 
+                          color: "from-green-500 to-emerald-500", 
+                          bg: darkMode ? "from-green-900/30 to-emerald-900/30" : "from-green-50 to-emerald-50" 
+                        },
+                        { 
+                          title: t('aiRecommendations'), 
+                          value: dashboardStats.user_stats.ai_recommendations, 
+                          icon: Sparkles, 
+                          color: "from-purple-500 to-pink-500", 
+                          bg: darkMode ? "from-purple-900/30 to-pink-900/30" : "from-purple-50 to-pink-50" 
+                        }
+                      ].map((stat, index) => (
+                        <motion.div
+                          key={stat.title}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3 + index * 0.1 }}
+                          className={`bg-gradient-to-br ${stat.bg} p-8 rounded-3xl shadow-xl border backdrop-blur-lg ${
+                            darkMode ? 'border-gray-700' : 'border-white/50'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className={`font-medium mb-2 ${
+                                darkMode ? 'text-gray-300' : 'text-slate-600'
+                              }`}>{stat.title}</p>
+                              <p className={`text-4xl font-bold ${
+                                darkMode ? 'text-white' : 'text-slate-800'
+                              }`}>{stat.value}</p>
+                            </div>
+                            <div className={`bg-gradient-to-br ${stat.color} p-4 rounded-2xl shadow-lg`}>
+                              <stat.icon className="w-8 h-8 text-white" />
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                      {/* Popular Destinations */}
+                      {dashboardStats.popular_destinations && dashboardStats.popular_destinations.length > 0 && (
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.6 }}
+                          className={`backdrop-blur-lg rounded-3xl shadow-2xl p-8 border ${
+                            darkMode 
+                              ? 'bg-gray-800/70 border-gray-700' 
+                              : 'bg-white/70 border-indigo-100'
+                          }`}
+                        >
+                          <h3 className={`text-2xl font-bold mb-6 flex items-center ${
+                            darkMode ? 'text-white' : 'text-slate-800'
+                          }`}>
+                            <TrendingUp className="w-6 h-6 text-indigo-600 mr-3" />
+                            Popular Destinations
+                          </h3>
+                          <div className="space-y-4">
+                            {dashboardStats.popular_destinations.map((dest, index) => (
+                              <div key={dest.name} className="flex items-center justify-between">
+                                <div className="flex items-center space-x-3">
+                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
+                                    index === 0 ? 'bg-yellow-500' : 
+                                    index === 1 ? 'bg-gray-400' : 
+                                    index === 2 ? 'bg-orange-500' : 'bg-indigo-500'
+                                  }`}>
+                                    {index + 1}
+                                  </div>
+                                  <span className={`font-medium ${darkMode ? 'text-gray-300' : 'text-slate-700'}`}>
+                                    {dest.name}
+                                  </span>
+                                </div>
+                                <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-slate-600'}`}>
+                                  {dest.count} trips planned
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {/* Global Statistics */}
+                      <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.7 }}
+                        className={`backdrop-blur-lg rounded-3xl shadow-2xl p-8 border ${
+                          darkMode 
+                            ? 'bg-gray-800/70 border-gray-700' 
+                            : 'bg-white/70 border-indigo-100'
+                        }`}
+                      >
+                        <h3 className={`text-2xl font-bold mb-6 flex items-center ${
+                          darkMode ? 'text-white' : 'text-slate-800'
+                        }`}>
+                          <Globe className="w-6 h-6 text-green-600 mr-3" />
+                          Community Stats
+                        </h3>
+                        <div className="space-y-6">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className={`p-4 rounded-2xl ${darkMode ? 'bg-gray-900/50' : 'bg-gradient-to-r from-blue-50 to-indigo-50'}`}>
+                              <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+                                {dashboardStats.global_stats.total_users}
+                              </p>
+                              <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-slate-600'}`}>Total Users</p>
+                            </div>
+                            <div className={`p-4 rounded-2xl ${darkMode ? 'bg-gray-900/50' : 'bg-gradient-to-r from-green-50 to-emerald-50'}`}>
+                              <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+                                {dashboardStats.global_stats.total_trips_planned}
+                              </p>
+                              <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-slate-600'}`}>Trips Planned</p>
+                            </div>
+                            <div className={`p-4 rounded-2xl ${darkMode ? 'bg-gray-900/50' : 'bg-gradient-to-r from-purple-50 to-pink-50'}`}>
+                              <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+                                {dashboardStats.global_stats.verified_vendors}
+                              </p>
+                              <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-slate-600'}`}>Verified Vendors</p>
+                            </div>
+                            <div className={`p-4 rounded-2xl ${darkMode ? 'bg-gray-900/50' : 'bg-gradient-to-r from-orange-50 to-red-50'}`}>
+                              <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+                                {dashboardStats.global_stats.active_offers}
+                              </p>
+                              <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-slate-600'}`}>Active Offers</p>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </div>
+
+                    {/* Recent Activity */}
                     <motion.div
-                      key={stat.title}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 + index * 0.1 }}
-                      className={`bg-gradient-to-br ${stat.bg} p-8 rounded-3xl shadow-xl border backdrop-blur-lg ${
-                        darkMode ? 'border-gray-700' : 'border-white/50'
+                      transition={{ delay: 0.8 }}
+                      className={`backdrop-blur-lg rounded-3xl shadow-2xl p-8 border ${
+                        darkMode 
+                          ? 'bg-gray-800/70 border-gray-700' 
+                          : 'bg-white/70 border-indigo-100'
                       }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className={`font-medium mb-2 ${
-                            darkMode ? 'text-gray-300' : 'text-slate-600'
-                          }`}>{stat.title}</p>
-                          <p className={`text-4xl font-bold ${
-                            darkMode ? 'text-white' : 'text-slate-800'
-                          }`}>{stat.value}</p>
-                        </div>
-                        <div className={`bg-gradient-to-br ${stat.color} p-4 rounded-2xl shadow-lg`}>
-                          <stat.icon className="w-8 h-8 text-white" />
-                        </div>
+                      <h3 className={`text-2xl font-bold mb-6 flex items-center ${
+                        darkMode ? 'text-white' : 'text-slate-800'
+                      }`}>
+                        <Clock className="w-6 h-6 text-orange-600 mr-3" />
+                        {t('recentActivity')}
+                      </h3>
+                      <div className="space-y-4">
+                        {dashboardStats.recent_activity.map((activity, index) => (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.9 + index * 0.1 }}
+                            className={`flex items-center space-x-4 p-4 rounded-2xl ${
+                              darkMode ? 'bg-gray-900/30' : 'bg-gradient-to-r from-indigo-50 to-purple-50'
+                            }`}
+                          >
+                            <div className="w-3 h-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"></div>
+                            <span className={`${darkMode ? 'text-gray-300' : 'text-slate-700'}`}>
+                              {activity}
+                            </span>
+                          </motion.div>
+                        ))}
                       </div>
                     </motion.div>
-                  ))}
-                </div>
-
-                {/* Recent Activity */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                  className={`backdrop-blur-lg rounded-3xl shadow-2xl p-8 border transition-all duration-500 ${
-                    darkMode 
-                      ? 'bg-gray-800/70 border-gray-700' 
-                      : 'bg-white/70 border-indigo-100'
-                  }`}
-                >
-                  <h3 className={`text-2xl font-bold mb-6 flex items-center ${
-                    darkMode ? 'text-white' : 'text-slate-800'
-                  }`}>
-                    <TrendingUp className="w-6 h-6 text-indigo-600 mr-3" />
-                    {t('recentActivity')}
-                  </h3>
-                  
-                  <div className="space-y-4">
-                    {[
-                      { action: "Generated itinerary for Goa", time: "2 hours ago", icon: Target },
-                      { action: "Analyzed route from Delhi to Mumbai", time: "1 day ago", icon: Route },
-                      { action: "Saved budget plan for Kerala", time: "1 day ago", icon: DollarSign },
-                      { action: "Discovered hidden gems in Hampi", time: "3 days ago", icon: Star }
-                    ].map((activity, index) => (
-                      <div key={index} className={`flex items-center space-x-4 p-4 rounded-xl transition-colors ${
-                        darkMode 
-                          ? 'bg-gray-700/50 hover:bg-gray-700/70' 
-                          : 'bg-indigo-50/50 hover:bg-indigo-100/50'
-                      }`}>
-                        <div className={`p-3 rounded-full ${
-                          darkMode ? 'bg-indigo-900/50' : 'bg-indigo-100'
-                        }`}>
-                          <activity.icon className="w-5 h-5 text-indigo-600" />
-                        </div>
-                        <div className="flex-1">
-                          <p className={`font-semibold ${
-                            darkMode ? 'text-white' : 'text-slate-800'
-                          }`}>{activity.action}</p>
-                          <p className={`text-sm ${
-                            darkMode ? 'text-gray-400' : 'text-slate-500'
-                          }`}>{activity.time}</p>
-                        </div>
-                      </div>
-                    ))}
+                  </>
+                ) : (
+                  <div className="text-center py-20">
+                    <TrendingUp className={`w-20 h-20 mx-auto mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-300'}`} />
+                    <h4 className={`text-xl font-bold mb-2 ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>
+                      Loading your dashboard...
+                    </h4>
+                    <p className={`text-lg ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>
+                      We're gathering your travel statistics
+                    </p>
                   </div>
-                </motion.div>
+                )}
               </SignedIn>
 
               <SignedOut>
                 <div className="text-center py-20">
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.6 }}
+                    animate={{ 
+                      y: [0, -10, 0],
+                      rotateX: [0, 10, 0]
+                    }}
+                    transition={{ 
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
                   >
-                    <Users className={`w-20 h-20 mx-auto mb-6 ${
-                      darkMode ? 'text-indigo-400' : 'text-indigo-300'
-                    }`} />
-                    <h3 className={`text-3xl font-bold mb-4 ${
-                      darkMode ? 'text-white' : 'text-slate-800'
-                    }`}>Join the TraveAI Community</h3>
-                    <p className={`text-xl mb-8 max-w-2xl mx-auto ${
-                      darkMode ? 'text-gray-300' : 'text-slate-600'
-                    }`}>
-                      Sign in to access your personalized dashboard, save itineraries, and unlock premium AI features.
-                    </p>
-                    <div className="flex justify-center space-x-4">
-                      <SignInButton mode="modal">
-                        <motion.button 
-                          className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          {t('signIn')}
-                        </motion.button>
-                      </SignInButton>
-                      <SignUpButton mode="modal">
-                        <motion.button 
-                          className={`border-2 border-indigo-600 text-indigo-600 px-8 py-4 rounded-2xl font-semibold transition-all duration-300 ${
-                            darkMode ? 'hover:bg-indigo-900/20' : 'hover:bg-indigo-50'
-                          }`}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          Create Account
-                        </motion.button>
-                      </SignUpButton>
-                    </div>
+                    <Users className={`w-20 h-20 mx-auto mb-6 ${darkMode ? 'text-indigo-400' : 'text-indigo-300'}`} />
                   </motion.div>
+                  <h4 className={`text-xl font-bold mb-2 ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>
+                    Sign in to view your dashboard
+                  </h4>
+                  <p className={`text-lg mb-8 ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>
+                    Track your travel planning progress and statistics
+                  </p>
+                  <SignInButton mode="modal">
+                    <button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-3 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300">
+                      Sign In Now
+                    </button>
+                  </SignInButton>
                 </div>
               </SignedOut>
             </motion.div>
           )}
         </AnimatePresence>
       </main>
-      
-      {/* ElevenLabs ConvAI Widget */}
-      <elevenlabs-convai agent-id="agent_4101k1p8rh7hfger6gxtadn88ccs"></elevenlabs-convai>
     </div>
   );
 }
