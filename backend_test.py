@@ -13,7 +13,7 @@ import sys
 import os
 
 # Backend URL from frontend .env
-BACKEND_URL = "https://723e664b-7b02-4d14-9798-e32ade2af012.preview.emergentagent.com/api"
+BACKEND_URL = "https://b8d4d3ca-adb7-4042-890d-3c9f72c08452.preview.emergentagent.com/api"
 
 class TraveAITester:
     def __init__(self):
