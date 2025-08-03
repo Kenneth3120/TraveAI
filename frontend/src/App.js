@@ -325,7 +325,7 @@ function App() {
 
     setIsGenerating(true);
     try {
-      const response = await axios.post(`${API}/generate-itinerary`, {
+      const response = await axios.post(`${API}/itineraries/generate-itinerary`, {
         destination: formData.destination,
         duration: parseInt(formData.duration),
         budget: formData.budget ? parseFloat(formData.budget) : null,
