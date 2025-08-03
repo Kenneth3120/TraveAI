@@ -169,7 +169,7 @@ app.listen(PORT, '0.0.0.0', () => {
 // Graceful shutdown
 process.on('SIGTERM', () => {
   logger.info('👋 TraveAI Backend shutting down gracefully...');
-  mongoose.connection.close(() => {
+  mongoose.connection.close().then(() => {
     logger.info('✅ Database connections closed!');
     process.exit(0);
   });
