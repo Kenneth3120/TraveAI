@@ -463,6 +463,8 @@ function App() {
         ? 'bg-gradient-to-br from-gray-900 via-slate-900 to-black text-white' 
         : 'bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-900'
     }`}>
+      {/* ElevenLabs ConvAI Widget */}
+      <elevenlabs-convai agent-id="agent_4101k1p8rh7hfger6gxtadn88ccs"></elevenlabs-convai>
       <Toaster 
         position="top-right"
         toastOptions={{
