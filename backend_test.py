@@ -127,7 +127,7 @@ class TraveAITester:
                     "duration": 3,
                     "budget": 15000,
                     "interests": ["Beach Activities", "Food & Cuisine"],
-                    "travel_style": "relaxed",
+                    "travel_style": "balanced",
                     "session_id": self.test_session_id
                 }
             },
@@ -138,7 +138,7 @@ class TraveAITester:
                     "duration": 2,
                     "budget": 8000,
                     "interests": ["Technology", "Food & Cuisine"],
-                    "travel_style": "efficient",
+                    "travel_style": "balanced",
                     "session_id": self.test_session_id
                 }
             },
@@ -149,7 +149,7 @@ class TraveAITester:
                     "duration": 4,
                     "budget": 12000,
                     "interests": ["Historical Sites", "Culture & Heritage"],
-                    "travel_style": "cultural",
+                    "travel_style": "balanced",
                     "session_id": self.test_session_id
                 }
             },
@@ -160,7 +160,7 @@ class TraveAITester:
                     "duration": 3,
                     "budget": 10000,
                     "interests": ["Nature & Wildlife", "Adventure Sports"],
-                    "travel_style": "adventure",
+                    "travel_style": "balanced",
                     "session_id": self.test_session_id
                 }
             },
@@ -171,7 +171,7 @@ class TraveAITester:
                     "duration": 2,
                     "budget": 6000,
                     "interests": ["Historical Sites", "Photography"],
-                    "travel_style": "cultural",
+                    "travel_style": "balanced",
                     "session_id": self.test_session_id
                 }
             }
@@ -180,7 +180,7 @@ class TraveAITester:
         success_count = 0
         for test_case in test_cases:
             try:
-                async with self.session.post(f"{BACKEND_URL}/generate-itinerary", json=test_case["payload"]) as response:
+                async with self.session.post(f"{BACKEND_URL}/itineraries/generate-itinerary", json=test_case["payload"]) as response:
                     if response.status == 200:
                         data = await response.json()
                         itinerary = data.get("generated_itinerary", "")
