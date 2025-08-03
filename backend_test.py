@@ -394,6 +394,7 @@ class TraveAITester:
         """Test destinations API"""
         print("\n🏖️ Testing Destinations API...")
         
+        # Test retrieving destinations
         try:
             async with self.session.get(f"{BACKEND_URL}/destinations") as response:
                 if response.status == 200:
