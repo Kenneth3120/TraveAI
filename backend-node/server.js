@@ -19,6 +19,9 @@ const dashboardRoutes = require('./routes/dashboard');
 const app = express();
 const PORT = process.env.PORT || 8001;
 
+// Trust proxy for rate limiting
+app.set('trust proxy', 1);
+
 // Configure Winston Logger
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
