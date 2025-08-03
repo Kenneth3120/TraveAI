@@ -8,7 +8,11 @@ class GeoService {
       httpAdapter: 'https',
       formatter: null,
       apiKey: null, // OpenStreetMap doesn't require API key
-      timeout: 10000
+      timeout: 10000,
+      extra: {
+        userAgent: 'TraveAI/1.0.0 (https://emergent-agent.com; travel-app@example.com)',
+        referrer: 'https://emergent-agent.com'
+      }
     });
   }
 
