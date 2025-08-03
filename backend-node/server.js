@@ -43,11 +43,17 @@ const logger = winston.createLogger({
 // Security middleware
 app.use(helmet());
 
-// Rate limiting
+// Rate limiting (more permissive for development)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1000, // limit each IP to 1000 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
+  max: 10000, // increased limit for development
+  message: 'Too many requests from this IP, please try again later.',
+  trustProxy: true,
+  skip: (req) => {
+    // Skip rate limiting for localhost and development
+    const clientIp = req.ip || req.connection.remoteAddress;
+    return clientIp === '127.0.0.1' || clientIp === '::1' || clientIp.startsWith('10.');
+  }
 });
 app.use(limiter);
 
