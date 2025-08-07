@@ -41,3 +41,32 @@ $scope.$watchGroup(['filterName', 'filterType', 'filterInstance', 'credentials']
   margin: 0;
   font-size: 1.2rem;
 }
+
+
+
+
+
+
+angular.module('towerAdminApp')
+.controller('UserMgmtController',function($scope,UserService,$rootScope){
+  $scope.currentUser = $rootScope.currentUser;
+  $scope.users = [];
+  $scope.newUser = {username:'',email:'',role:'viewer'};
+  $scope.showAddForm = false;
+
+  function load(){
+    UserService.list().then(data=>$scope.users=data);
+  }
+  load();
+
+  $scope.addUser = function(){
+    UserService.create($scope.newUser)
+      .then(()=>{ load(); $scope.showAddForm=false; });
+  };
+  $scope.updateUser = function(user){
+    UserService.update(user).then(()=>load());
+  };
+  $scope.deleteUser = function(id){
+    if(confirm('Delete user?')) UserService.delete(id).then(()=>load());
+  };
+});
